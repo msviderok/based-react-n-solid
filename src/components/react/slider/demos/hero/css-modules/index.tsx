@@ -1,0 +1,17 @@
+/** @jsxImportSource react */
+import { Slider } from "@msviderok/base-ui-react/slider";
+import * as React from "react";
+import styles from "./index.module.css";
+
+export default function ExampleSlider() {
+  return (
+    <Slider.Root defaultValue={25}>
+      <Slider.Control className={styles.Control}>
+        <Slider.Track className={styles.Track}>
+          <Slider.Indicator className={styles.Indicator} />
+          <Slider.Thumb className={styles.Thumb} />
+        </Slider.Track>
+      </Slider.Control>
+    </Slider.Root>
+  );
+}
