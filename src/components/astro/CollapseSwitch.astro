@@ -1,0 +1,34 @@
+<div class="flex items-center gap-3 bg-secondary/30 px-3 py-1.5 rounded-full border border-border">
+  <span class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+    Expand All
+  </span>
+  <button
+    id="all-sections-selector"
+    class="relative w-10 h-5 rounded-full transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-ring"
+    role="switch"
+  >
+    <div
+      id="all-sections-selector-indicator"
+      class="absolute top-1 left-1 size-3 bg-white rounded-full transition-transform duration-200"
+    >
+    </div>
+  </button>
+</div>
+
+<script>
+  import { toggleAllSections, allSectionsOpen } from "@/store";
+
+  const allSectionsSelector = document.getElementById("all-sections-selector")!;
+  const allSectionsSelectorIndicator = document.getElementById("all-sections-selector-indicator")!;
+
+  allSectionsSelector.addEventListener("click", toggleAllSections);
+
+  allSectionsOpen.subscribe((value) => {
+    allSectionsSelector.setAttribute("aria-checked", value.toString());
+    allSectionsSelector.classList.toggle("bg-slate-500", value);
+    allSectionsSelector.classList.toggle("bg-muted", !value);
+
+    allSectionsSelectorIndicator.classList.toggle("translate-x-5", value);
+    allSectionsSelectorIndicator.classList.toggle("translate-x-0", !value);
+  });
+</script>

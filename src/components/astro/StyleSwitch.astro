@@ -1,0 +1,69 @@
+<div class="flex items-center gap-3 bg-secondary/30 px-3 py-1.5 rounded-full border border-border">
+  <span
+    id="tailwind-selector"
+    class="text-[10px] font-bold uppercase tracking-widest transition-colors duration-200"
+  >
+    Tailwind
+  </span>
+  <button
+    id="styling-selector"
+    role="switch"
+    class="relative w-10 h-5 rounded-full transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-ring"
+  >
+    <div
+      id="styling-selector-indicator"
+      class="absolute top-1 left-1 size-3 bg-white rounded-full transition-transform duration-200"
+    >
+    </div>
+  </button>
+  <span
+    id="css-modules-selector"
+    class="text-[10px] font-bold uppercase tracking-widest transition-colors duration-200"
+  >
+    CSS Modules
+  </span>
+</div>
+
+<script>
+  import { styling } from "@/store";
+
+  const cssModulesSelector = document.getElementById("css-modules-selector")!;
+  const tailwindSelector = document.getElementById("tailwind-selector")!;
+  const stylingSelector = document.getElementById("styling-selector")!;
+  const stylingSelectorIndicator = document.getElementById("styling-selector-indicator")!;
+
+  stylingSelector.addEventListener("click", () => {
+    styling.get() === "css-modules" ? styling.set("tailwind") : styling.set("css-modules");
+  });
+
+  styling.subscribe((value) => {
+    if (value === "css-modules") {
+      cssModulesSelector.classList.add("text-purple-400");
+      cssModulesSelector.classList.remove("text-muted-foreground");
+
+      tailwindSelector.classList.add("text-muted-foreground");
+      tailwindSelector.classList.remove("text-blue-400");
+
+      stylingSelector.classList.add("bg-purple-500");
+      stylingSelector.classList.remove("bg-blue-500");
+      stylingSelector.setAttribute("data-checked", "true");
+
+      stylingSelectorIndicator.classList.add("translate-x-5");
+      stylingSelectorIndicator.classList.remove("translate-x-0");
+    }
+    if (value === "tailwind") {
+      tailwindSelector.classList.add("text-blue-400");
+      tailwindSelector.classList.remove("text-muted-foreground");
+
+      cssModulesSelector.classList.add("text-muted-foreground");
+      cssModulesSelector.classList.remove("text-purple-400");
+
+      stylingSelector.classList.add("bg-blue-500");
+      stylingSelector.classList.remove("bg-purple-500");
+      stylingSelector.setAttribute("data-checked", "false");
+
+      stylingSelectorIndicator.classList.add("translate-x-0");
+      stylingSelectorIndicator.classList.remove("translate-x-5");
+    }
+  });
+</script>

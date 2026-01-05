@@ -1,0 +1,34 @@
+<div
+  class="fixed inset-0 z-0 pointer-events-none transition-opacity duration-400 ease-in-out bg-pattern-tailwind transform-[scale(3)] blur-[0.5px]"
+>
+</div>
+<div
+  class="fixed inset-0 z-0 pointer-events-none transition-opacity duration-400 ease-in-out bg-pattern-css transform-[scale(3)] blur-[0.5px]"
+>
+</div>
+
+<script>
+  import { styling } from "@/store";
+
+  styling.subscribe((value) => {
+    console.log(value);
+    const bgTw = document.querySelector(".bg-pattern-tailwind")!;
+    const bgCss = document.querySelector(".bg-pattern-css")!;
+
+    if (value === "css-modules") {
+      bgTw.classList.add("opacity-0");
+      bgTw.classList.remove("opacity-100");
+      bgCss.classList.remove("opacity-0");
+      bgCss.classList.add("opacity-100");
+      return;
+    }
+
+    if (value === "tailwind") {
+      bgTw.classList.remove("opacity-0");
+      bgTw.classList.add("opacity-100");
+      bgCss.classList.add("opacity-0");
+      bgCss.classList.remove("opacity-100");
+      return;
+    }
+  });
+</script>
