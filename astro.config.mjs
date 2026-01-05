@@ -10,7 +10,7 @@ import { fileURLToPath } from "url";
 export default defineConfig({
   integrations: [
     react({ include: ["**/react/**/*.{ts,tsx}"] }),
-    solid({ include: ["**/solid/**/*.{ts,tsx}"] }),
+    solid({ include: ["**/solid/**/*.{ts,tsx}", "**/ui/**/*.{ts,tsx}"] }),
   ],
 
   vite: {

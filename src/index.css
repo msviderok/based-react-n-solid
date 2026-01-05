@@ -2,6 +2,9 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/inter";
+@import "tailwindcss/preflight" layer(base);
+@import "tailwindcss/theme" layer(theme);
+@import "tailwindcss/utilities" layer(utilities);
 
 @custom-variant dark (&:is(.dark *));
 
@@ -38,6 +41,38 @@
   --sidebar-accent-foreground: oklch(0.98 0.02 166);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  --color-blue: oklch(45% 50% 264deg);
+  --color-red: oklch(50% 55% 31deg);
+
+  --color-gray-50: oklch(98.42% 0.0034 247.86deg);
+  --color-gray-100: oklch(12% 9.5% 264deg / 5%);
+  --color-gray-200: oklch(12% 9% 264deg / 8%);
+  --color-gray-300: oklch(12% 8.5% 264deg / 17%);
+  --color-gray-400: oklch(12% 8% 264deg / 38%);
+  --color-gray-500: oklch(12% 7.5% 264deg / 50%);
+  --color-gray-600: oklch(12% 7% 264deg / 67%);
+  --color-gray-700: oklch(12% 6% 264deg / 77%);
+  --color-gray-800: oklch(12% 5% 264deg / 85%);
+  --color-gray-900: oklch(12% 5% 264deg / 90%);
+  --color-gray-950: oklch(12% 5% 264deg / 95%);
+
+  @media (prefers-color-scheme: dark) {
+    --color-blue: oklch(69% 50% 264deg);
+    --color-red: oklch(80% 55% 31deg);
+
+    --color-gray-50: oklch(17% 1% 264deg);
+    --color-gray-100: oklch(28% 3% 264deg / 65%);
+    --color-gray-200: oklch(31% 3% 264deg / 80%);
+    --color-gray-300: oklch(35% 3% 264deg / 80%);
+    --color-gray-400: oklch(47% 3.5% 264deg / 80%);
+    --color-gray-500: oklch(64% 4% 264deg / 80%);
+    --color-gray-600: oklch(82% 4% 264deg / 80%);
+    --color-gray-700: oklch(92% 4.5% 264deg / 80%);
+    --color-gray-800: oklch(93% 3.5% 264deg / 85%);
+    --color-gray-900: oklch(95% 2% 264deg / 90%);
+    --color-gray-950: oklch(94% 1.5% 264deg / 95%);
+  }
 }
 
 .dark {
@@ -72,6 +107,99 @@
   --sidebar-accent-foreground: oklch(0.26 0.05 173);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+}
+
+@theme {
+  /* Gray scale that is roughly compatible with Tailwind's grays */
+  --color-gray-50: oklch(98% 0.25% 264deg);
+  --color-gray-75: oklch(97% 0.325% 264deg); /* Not a Tailwind step, don't use it in the demos */
+  --color-gray-100: oklch(12% 9.5% 264deg / 5%);
+  --color-gray-200: oklch(12% 9% 264deg / 7%);
+  --color-gray-300: oklch(12% 8.5% 264deg / 17%);
+  --color-gray-400: oklch(12% 8% 264deg / 38%);
+  --color-gray-500: oklch(12% 7.5% 264deg / 50%);
+  --color-gray-600: oklch(12% 7% 264deg / 67%);
+  --color-gray-700: oklch(12% 6% 264deg / 77%);
+  --color-gray-800: oklch(12% 5% 264deg / 85%);
+  --color-gray-900: oklch(12% 5% 264deg / 90%);
+  --color-gray-950: oklch(12% 5% 264deg / 95%);
+
+  /* Other colors used in Tailwind demos */
+  --color-blue-800: var(--color-blue);
+  --color-red-800: var(--color-red);
+
+  /* Functional colors for the docs */
+  --color-content: white;
+  --color-background: var(--color-gray-50);
+  --color-foreground: var(--color-gray-900);
+  --color-popup: white;
+  --color-gridline: oklch(91.6% 1% 264deg);
+  --color-selection: oklch(80% 50% 264deg / 25%);
+  --color-highlight: var(--color-blue);
+  --color-line-highlight: oklch(80% 50% 264deg / 10%);
+  --color-line-highlight-strong: oklch(80% 50% 264deg / 25%);
+  --color-inline-highlight: oklch(80% 50% 264deg / 15%);
+
+  /* Text colors for the docs */
+  --color-gray: var(--color-gray-600);
+  --color-navy: oklch(31% 25% 264deg);
+  --color-blue: oklch(45% 50% 264deg);
+  --color-green: oklch(46% 30% 150deg);
+  --color-purple: oklch(40% 45% 360deg);
+  --color-violet: oklch(40% 60% 300deg);
+  --color-red: oklch(50% 55% 31deg);
+
+  /* Typography */
+  --font-mono: "SF Mono", "Menlo", "DejaVu Sans Mono", "Consolas", "Inconsolata", monospace;
+  --font-sans: "Unica 77", system-ui, sans-serif;
+
+  --text-xs: 0.8125rem;
+  --text-xs--line-height: 1.25rem;
+  --text-xs--letter-spacing: 0.001em;
+
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.25rem;
+  --text-sm--letter-spacing: 0.016em;
+
+  --text-md: 0.9375rem;
+  --text-md--line-height: 1.375rem;
+  --text-md--letter-spacing: 0.016em;
+
+  --text-base: 1rem;
+  --text-base--line-height: 1.5rem;
+  --text-base--letter-spacing: 0em;
+
+  --text-lg: 1.125rem;
+  --text-lg--line-height: 1.75rem;
+  --text-lg--letter-spacing: -0.0025em;
+
+  --text-xl: 1.3125rem;
+  --text-xl--line-height: 1.625rem;
+  --text-xl--letter-spacing: -0.005em;
+
+  --text-2xl: 1.5rem;
+  --text-2xl--line-height: 1.25;
+  --text-2xl--letter-spacing: -0.0125em;
+
+  --text-3xl: 1.875rem;
+  --text-3xl--line-height: 1.2;
+  --text-3xl--letter-spacing: -0.015em;
+
+  --text-4xl: 2.25rem;
+  --text-4xl--line-height: 2.5rem;
+  --text-4xl--letter-spacing: -0.015em;
+
+  --text-5xl: 3rem;
+  --text-5xl--line-height: 1;
+  --text-5xl--letter-spacing: -0.015em;
+
+  --text-6xl: 3.75rem;
+  --text-6xl--line-height: 0.95;
+  --text-6xl--letter-spacing: -0.015em;
+
+  --ease-out-fast: cubic-bezier(0.45, 1.005, 0, 1.005);
+  --ease-in-slow: cubic-bezier(0.375, 0.015, 0.545, 0.455);
+  --header-height: 3rem;
 }
 
 @theme inline {
@@ -125,19 +253,5 @@
   }
   html {
     @apply font-sans;
-  }
-}
-
-@layer utilities {
-  .bg-pattern-tailwind {
-    background-image: url("./assets/tailwindcss-logotype-white.svg");
-    background-size: 50px;
-    filter: drop-shadow(0 0 1px #38bdf8);
-  }
-
-  .bg-pattern-css {
-    background-image: url("./assets/cssmod_logo.svg");
-    background-size: 50px;
-    filter: drop-shadow(0 0 1px #ad46ff);
   }
 }

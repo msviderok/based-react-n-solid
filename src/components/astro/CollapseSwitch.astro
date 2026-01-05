@@ -1,5 +1,8 @@
 <div class="flex items-center gap-3 bg-secondary/30 px-3 py-1.5 rounded-full border border-border">
-  <span class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+  <span
+    id="all-sections-selector-label"
+    class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
+  >
     Expand All
   </span>
   <button
@@ -19,6 +22,7 @@
   import { toggleAllSections, allSectionsOpen } from "@/store";
 
   const allSectionsSelector = document.getElementById("all-sections-selector")!;
+  const allSectionsSelectorLabel = document.getElementById("all-sections-selector-label")!;
   const allSectionsSelectorIndicator = document.getElementById("all-sections-selector-indicator")!;
 
   allSectionsSelector.addEventListener("click", toggleAllSections);
@@ -30,5 +34,8 @@
 
     allSectionsSelectorIndicator.classList.toggle("translate-x-5", value);
     allSectionsSelectorIndicator.classList.toggle("translate-x-0", !value);
+
+    allSectionsSelectorLabel.classList.toggle("text-slate-300", value);
+    allSectionsSelectorLabel.classList.toggle("text-muted-foreground", !value);
   });
 </script>

@@ -1,0 +1,72 @@
+---
+import { ChevronDown } from "@lucide/astro";
+import { SolidComponent } from "@/components/solid";
+
+interface Props {
+  compName: string;
+  variants: string[];
+}
+
+const { compName, variants } = Astro.props;
+---
+
+<astro-section data-component={compName}>
+  <section data-component={compName} class="transition-all duration-200 mb-4 flex-auto">
+    <button
+      class="flex items-center gap-3 hover:bg-secondary/80 transition-colors mb-4 bg-secondary/30 px-3 py-1.5 rounded-full border border-border text-muted-foreground"
+    >
+      <span class="text-sm font-bold tracking-tight capitalize">
+        {compName.replace("-", " ")}
+      </span>
+      <ChevronDown class="size-4 transition-transform duration-150" />
+    </button>
+
+    <div class="space-y-6 pl-10 border-l-2 border-border/50 py-4">
+      {
+        variants.map((variant) => (
+          <div class="space-y-4">
+            <h3 class="text-base font-semibold text-muted-foreground capitalize">
+              {variant.replace("-", " ")}
+            </h3>
+            <div class="grid grid-cols-[1fr_auto_1fr] gap-8 bg-white/[0.02] p-4 py-8 rounded-xl border border-white/5 items-center">
+              <div class="flex flex-1 items-center justify-center">
+                <SolidComponent component={compName} type={variant} client:only="solid-js" />
+              </div>
+              <div class="w-px h-12 bg-border/40" aria-hidden="true" />
+              <div class="flex flex-1 items-center justify-center">
+                <SolidComponent component={compName} type={variant} client:only="solid-js" />
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+</astro-section>
+
+<script>
+  import { toggleSection, allSectionsOpen, sections } from "@/store";
+  import { effect, computed } from "nanostores";
+
+  class AstroSection extends HTMLElement {
+    connectedCallback() {
+      const compName = this.dataset.component!;
+      const button = this.querySelector("button")!;
+      const icon = this.querySelector("svg")!;
+      const panel = this.querySelector("div")!;
+      const store = computed(sections, (sections) => sections[compName]);
+
+      button.addEventListener("click", () => toggleSection(compName));
+      effect([store, allSectionsOpen], ({ open }, allOpen) => {
+        const isOpen = open || allOpen;
+
+        panel.style.display = isOpen ? "block" : "none";
+        button.classList.toggle("mb-8", isOpen);
+        button.setAttribute("aria-checked", isOpen.toString());
+        icon.classList.toggle("-rotate-90", isOpen);
+      });
+    }
+  }
+
+  customElements.define("astro-section", AstroSection);
+</script>

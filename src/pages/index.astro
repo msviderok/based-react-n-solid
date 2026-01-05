@@ -1,8 +1,14 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import AppLayout from '../layouts/AppLayout.astro';
+import Section from "@/components/astro/Section.astro";
+import AppLayout from "@/layouts/AppLayout.astro";
+
+const complist = await fetch(`${import.meta.env.VERCEL_URL}/complist.json`).then(
+  (res) => res.json() as Promise<[string, string[]][]>
+);
 ---
 
-<Layout>
-	<AppLayout>123</AppLayout>
-</Layout>
+<AppLayout>
+  <div class="">
+    {complist.map(([compName, variants]) => <Section compName={compName} variants={variants} />)}
+  </div>
+</AppLayout>

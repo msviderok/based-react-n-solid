@@ -2,29 +2,29 @@
 import Logos from "@/components/astro/Logos.astro";
 import StyleSwitch from "@/components/astro/StyleSwitch.astro";
 import CollapseSwitch from "@/components/astro/CollapseSwitch.astro";
-import BG from "@/components/astro/BG.astro";
+import Layout from "./Layout.astro";
 ---
 
-<div
-  class="dark min-h-screen bg-background text-foreground selection:bg-foreground selection:text-background relative overflow-hidden py-8 px-4 sm:px-8 md:px-16"
->
-  <BG />
-  <main class="relative z-10 max-w-6xl mx-auto space-y-4 font-sans">
-    <header class="space-y-4 mb-12 flex flex-col gap-4">
-      <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <h1 class="text-3xl sm:text-3xl font-bold tracking-tight">Cross-Framework Comparison</h1>
-        <div
-          class="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6 lg:shrink-0"
-        >
-          <StyleSwitch />
-          <CollapseSwitch />
+<Layout>
+  <div
+    class="dark min-h-screen bg-background text-foreground selection:bg-foreground selection:text-background relative overflow-hidden py-8 px-4 sm:px-8 md:px-16 flex w-full flex-col items-center"
+  >
+    <main class="relative z-10 max-w-8xl w-full space-y-4 font-sans">
+      <header class="space-y-4 mb-12 flex flex-col gap-4">
+        <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <h1 class="text-3xl sm:text-3xl font-bold tracking-tight">Cross-Framework Comparison</h1>
+          <div
+            class="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6 lg:shrink-0"
+          >
+            <StyleSwitch />
+            <CollapseSwitch />
+          </div>
         </div>
-      </div>
 
-      <Logos />
-    </header>
+        <Logos />
+      </header>
 
-    <!-- <section class={`transition-all duration-300 ${openSections.dialog ? "mb-8" : "mb-2"}`}>
+      <!-- <section class={`transition-all duration-300 ${openSections.dialog ? "mb-8" : "mb-2"}`}>
       <button
         onClick={() => toggleSection("dialog")}
         class="flex items-center gap-3 px-4 py-1.5 rounded-full bg-secondary border border-border hover:bg-secondary/80 transition-colors mb-4"
@@ -130,5 +130,7 @@ import BG from "@/components/astro/BG.astro";
         )
       }
     </section> -->
-  </main>
-</div>
+      <slot />
+    </main>
+  </div>
+</Layout>

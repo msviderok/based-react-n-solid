@@ -33,11 +33,11 @@
   const stylingSelectorIndicator = document.getElementById("styling-selector-indicator")!;
 
   stylingSelector.addEventListener("click", () => {
-    styling.get() === "css-modules" ? styling.set("tailwind") : styling.set("css-modules");
+    styling.get() === "CssModules" ? styling.set("Tailwind") : styling.set("CssModules");
   });
 
   styling.subscribe((value) => {
-    if (value === "css-modules") {
+    if (value === "CssModules") {
       cssModulesSelector.classList.add("text-purple-400");
       cssModulesSelector.classList.remove("text-muted-foreground");
 
@@ -51,7 +51,7 @@
       stylingSelectorIndicator.classList.add("translate-x-5");
       stylingSelectorIndicator.classList.remove("translate-x-0");
     }
-    if (value === "tailwind") {
+    if (value === "Tailwind") {
       tailwindSelector.classList.add("text-blue-400");
       tailwindSelector.classList.remove("text-muted-foreground");
 
