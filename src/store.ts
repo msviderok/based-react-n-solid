@@ -7,7 +7,7 @@ interface Section {
   variants: string[];
 }
 
-const COMPLIST: [string, string[]][] = [
+export const COMPLIST: [string, string[]][] = [
   ["accordion", ["hero"]],
   ["alert-dialog", ["hero"]],
   ["avatar", ["hero"]],

@@ -1,14 +1,11 @@
 ---
 import Section from "@/components/astro/Section.astro";
 import Layout from "@/Layout.astro";
-
-const complist = await fetch(`${import.meta.env.VERCEL_URL}/complist.json`).then(
-  (res) => res.json() as Promise<[string, string[]][]>
-);
+import { COMPLIST } from "@/store";
 ---
 
 <Layout>
   <div id="components-root">
-    {complist.map(([compName, variants]) => <Section compName={compName} variants={variants} />)}
+    {COMPLIST.map(([compName, variants]) => <Section compName={compName} variants={variants} />)}
   </div>
 </Layout>

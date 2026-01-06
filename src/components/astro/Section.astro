@@ -1,5 +1,6 @@
 ---
 import { SolidComponent } from "@/components/solid";
+import { ReactComponent } from "@/components/react";
 
 interface Props {
   compName: string;
@@ -59,7 +60,7 @@ const { compName, variants } = Astro.props;
                   React
                 </span>
                 <div class="flex flex-1 items-center justify-center">
-                  <SolidComponent component={compName} type={variant} client:only="solid-js" />
+                  <ReactComponent component={compName} type={variant} client:only="react" />
                 </div>
               </div>
             </div>
