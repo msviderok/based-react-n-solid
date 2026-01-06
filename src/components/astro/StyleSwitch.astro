@@ -1,7 +1,10 @@
-<div class="flex items-center gap-3 bg-secondary/30 px-3 py-1.5 rounded-full border border-border">
+<div
+  class="flex items-center gap-3 px-3 py-2 text-[10px] rounded-sm hover:transition-all bg-linear-to-r to-transparent border select-none cursor-pointer"
+  role="button"
+>
   <span
     id="tailwind-selector"
-    class="text-[10px] font-bold uppercase tracking-widest transition-colors duration-200"
+    class="text-[10px] font-semibold uppercase tracking-[0.18em] transition-colors duration-200"
   >
     Tailwind
   </span>
@@ -18,7 +21,7 @@
   </button>
   <span
     id="css-modules-selector"
-    class="text-[10px] font-bold uppercase tracking-widest transition-colors duration-200"
+    class="text-[10px] font-semibold uppercase tracking-[0.18em] transition-colors duration-200"
   >
     CSS Modules
   </span>
@@ -27,17 +30,31 @@
 <script>
   import { styling } from "@/store";
 
+  const switchElement = document.querySelector("div[role='button']")!;
   const cssModulesSelector = document.getElementById("css-modules-selector")!;
   const tailwindSelector = document.getElementById("tailwind-selector")!;
   const stylingSelector = document.getElementById("styling-selector")!;
   const stylingSelectorIndicator = document.getElementById("styling-selector-indicator")!;
 
-  stylingSelector.addEventListener("click", () => {
+  switchElement.addEventListener("click", () => {
     styling.get() === "CssModules" ? styling.set("Tailwind") : styling.set("CssModules");
   });
 
   styling.subscribe((value) => {
     if (value === "CssModules") {
+      switchElement.classList.add(
+        "from-purple-400/5",
+        "border-purple-400/20",
+        "hover:border-purple-400/40",
+        "hover:from-purple-400/10"
+      );
+      switchElement.classList.remove(
+        "from-blue-400/5",
+        "border-blue-400/20",
+        "hover:border-blue-400/40",
+        "hover:from-blue-400/10"
+      );
+
       cssModulesSelector.classList.add("text-purple-400");
       cssModulesSelector.classList.remove("text-muted-foreground");
 
@@ -51,7 +68,21 @@
       stylingSelectorIndicator.classList.add("translate-x-5");
       stylingSelectorIndicator.classList.remove("translate-x-0");
     }
+
     if (value === "Tailwind") {
+      switchElement.classList.add(
+        "from-blue-400/5",
+        "border-blue-400/20",
+        "hover:border-blue-400/40",
+        "hover:from-blue-400/10"
+      );
+      switchElement.classList.remove(
+        "from-purple-400/5",
+        "border-purple-400/20",
+        "hover:border-purple-400/40",
+        "hover:from-purple-400/10"
+      );
+
       tailwindSelector.classList.add("text-blue-400");
       tailwindSelector.classList.remove("text-muted-foreground");
 

@@ -1,115 +1,37 @@
-@import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
-@import "@fontsource-variable/inter";
+/*
+ * README
+ * - Use plain CSS to create docs component styles
+ *   - Component CSS must use "@layer components" to work correctly with Tailwind
+ *   - Use component name as the prefix to avoid conflicts, e.g. ".SelectTriggerIcon"
+ *   - Prefix CSS variables with component name too, e.g. "--root-layout-padding-x"
+ * - Use Tailwind for layout utils
+ * - There are two reset layers:
+ *   - "@layer all" is a truly global reset (includes all demos)
+ *   - "@layer base" is Tailwind’s reset that is reverted in non-Tailwind demos
+ *   - We rely on both to build the docs docs
+ * - Docs and demos are built using the same theme
+ *   - Theme tokens use Tailwind v4 "@theme" naming convention
+ *   - Don't use our custom tokens in the demos – only what's available in the default theme.
+ */
+
+@layer all;
+@layer base;
+@layer theme;
+@layer components;
+@layer utilities;
+
 @import "tailwindcss/preflight" layer(base);
 @import "tailwindcss/theme" layer(theme);
 @import "tailwindcss/utilities" layer(utilities);
 
-@custom-variant dark (&:is(.dark *));
-
-:root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.6 0.13 163);
-  --primary-foreground: oklch(0.98 0.02 166);
-  --secondary: oklch(0.967 0.001 286.375);
-  --secondary-foreground: oklch(0.21 0.006 285.885);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.6 0.13 163);
-  --accent-foreground: oklch(0.98 0.02 166);
-  --destructive: oklch(0.58 0.22 27);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.85 0.13 165);
-  --chart-2: oklch(0.77 0.15 163);
-  --chart-3: oklch(0.7 0.15 162);
-  --chart-4: oklch(0.6 0.13 163);
-  --chart-5: oklch(0.51 0.1 166);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.6 0.13 163);
-  --sidebar-primary-foreground: oklch(0.98 0.02 166);
-  --sidebar-accent: oklch(0.6 0.13 163);
-  --sidebar-accent-foreground: oklch(0.98 0.02 166);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-
-  --color-blue: oklch(45% 50% 264deg);
-  --color-red: oklch(50% 55% 31deg);
-
-  --color-gray-50: oklch(98.42% 0.0034 247.86deg);
-  --color-gray-100: oklch(12% 9.5% 264deg / 5%);
-  --color-gray-200: oklch(12% 9% 264deg / 8%);
-  --color-gray-300: oklch(12% 8.5% 264deg / 17%);
-  --color-gray-400: oklch(12% 8% 264deg / 38%);
-  --color-gray-500: oklch(12% 7.5% 264deg / 50%);
-  --color-gray-600: oklch(12% 7% 264deg / 67%);
-  --color-gray-700: oklch(12% 6% 264deg / 77%);
-  --color-gray-800: oklch(12% 5% 264deg / 85%);
-  --color-gray-900: oklch(12% 5% 264deg / 90%);
-  --color-gray-950: oklch(12% 5% 264deg / 95%);
-
-  @media (prefers-color-scheme: dark) {
-    --color-blue: oklch(69% 50% 264deg);
-    --color-red: oklch(80% 55% 31deg);
-
-    --color-gray-50: oklch(17% 1% 264deg);
-    --color-gray-100: oklch(28% 3% 264deg / 65%);
-    --color-gray-200: oklch(31% 3% 264deg / 80%);
-    --color-gray-300: oklch(35% 3% 264deg / 80%);
-    --color-gray-400: oklch(47% 3.5% 264deg / 80%);
-    --color-gray-500: oklch(64% 4% 264deg / 80%);
-    --color-gray-600: oklch(82% 4% 264deg / 80%);
-    --color-gray-700: oklch(92% 4.5% 264deg / 80%);
-    --color-gray-800: oklch(93% 3.5% 264deg / 85%);
-    --color-gray-900: oklch(95% 2% 264deg / 90%);
-    --color-gray-950: oklch(94% 1.5% 264deg / 95%);
-  }
-}
-
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.7 0.15 162);
-  --primary-foreground: oklch(0.26 0.05 173);
-  --secondary: oklch(0.274 0.006 286.033);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.7 0.15 162);
-  --accent-foreground: oklch(0.26 0.05 173);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.85 0.13 165);
-  --chart-2: oklch(0.77 0.15 163);
-  --chart-3: oklch(0.7 0.15 162);
-  --chart-4: oklch(0.6 0.13 163);
-  --chart-5: oklch(0.51 0.1 166);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.77 0.15 163);
-  --sidebar-primary-foreground: oklch(0.26 0.05 173);
-  --sidebar-accent: oklch(0.7 0.15 162);
-  --sidebar-accent-foreground: oklch(0.26 0.05 173);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
-}
+/* Handy link to the default Tailwind theme:
+ /* https://github.com/tailwindlabs/tailwindcss/blob/next/packages/tailwindcss/theme.css */
 
 @theme {
+  /* --color-*: initial; */
+  --color-white: white;
+  --color-black: black;
+
   /* Gray scale that is roughly compatible with Tailwind's grays */
   --color-gray-50: oklch(98% 0.25% 264deg);
   --color-gray-75: oklch(97% 0.325% 264deg); /* Not a Tailwind step, don't use it in the demos */
@@ -200,58 +122,115 @@
   --ease-out-fast: cubic-bezier(0.45, 1.005, 0, 1.005);
   --ease-in-slow: cubic-bezier(0.375, 0.015, 0.545, 0.455);
   --header-height: 3rem;
+  --color-border: var(--color-gray-300);
 }
 
-@theme inline {
-  --font-sans: "Inter Variable", sans-serif;
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
-  --color-card: var(--card);
-  --color-foreground: var(--foreground);
-  --color-background: var(--background);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
-  --radius-3xl: calc(var(--radius) + 12px);
-  --radius-4xl: calc(var(--radius) + 16px);
+:root {
+  @media (prefers-color-scheme: dark) {
+    --color-gray-50: oklch(17% 0.25% 264deg);
+    --color-gray-75: oklch(19% 0.5% 264deg); /* Not a Tailwind step, don't use it in the demos */
+    --color-gray-100: oklch(28% 0.75% 264deg / 65%);
+    --color-gray-200: oklch(29% 0.75% 264deg / 80%);
+    --color-gray-300: oklch(35% 0.75% 264deg / 80%);
+    --color-gray-400: oklch(47% 0.875% 264deg / 80%);
+    --color-gray-500: oklch(64% 1% 264deg / 80%);
+    --color-gray-600: oklch(82% 1% 264deg / 80%);
+    --color-gray-700: oklch(92% 1.125% 264deg / 80%);
+    --color-gray-800: oklch(93% 0.875% 264deg / 85%);
+    --color-gray-900: oklch(95% 0.5% 264deg / 90%);
+    --color-gray-950: oklch(94% 0.375% 264deg / 95%);
+
+    /* Functional colors */
+    --color-content: black;
+    --color-background: black;
+    --color-foreground: oklch(90% 2% 264deg);
+    --color-popup: var(--color-gray-50);
+    --color-gridline: oklch(24% 1% 264deg);
+    --color-highlight: oklch(45% 40% 264deg);
+    --color-selection: oklch(50% 50% 264deg / 40%);
+    --color-line-highlight: oklch(50% 50% 264deg / 20%);
+    --color-line-highlight-strong: oklch(50% 50% 264deg / 35%);
+    --color-inline-highlight: oklch(50% 50% 264deg / 35%);
+
+    /* Text colors */
+    --color-gray: var(--color-gray-600);
+    --color-blue: oklch(69% 50% 264deg);
+    --color-green: oklch(75% 25% 150deg);
+    --color-navy: oklch(85% 25% 264deg);
+    --color-purple: oklch(85% 30% 360deg);
+    --color-red: oklch(80% 55% 31deg);
+    --color-violet: oklch(80% 60% 280deg);
+  }
 }
 
+/* Disable docs-specific variables in the demos. Keep this in sync with the "@theme" block above */
+@layer theme {
+  [data-demo] {
+    --text-md: initial;
+    --text-md--line-height: initial;
+    --text-md--letter-spacing: initial;
+
+    --color-gray: initial;
+    --color-navy: initial;
+    --color-green: initial;
+    --color-purple: initial;
+    --color-violet: initial;
+    --color-content: initial;
+    --color-background: initial;
+    --color-foreground: initial;
+    --color-popup: initial;
+    --color-gridline: initial;
+    --color-highlight: initial;
+    --color-gray-75: initial;
+    --ease-out-fast: initial;
+    --ease-in-slow: initial;
+    --header-height: initial;
+    --color-border: initial;
+
+    /* These variables are available in the default Tailwind theme */
+    &:not([data-demo="tailwind"]) {
+      --color-white: initial;
+      --color-black: initial;
+    }
+    /* These variables are exposed in "demo-theme.css" for CSS Modules demos */
+    &:not([data-demo="css-modules"]) {
+      --color-blue: initial;
+      --color-red: initial;
+    }
+  }
+}
+
+/* Remove the Tailwind reset in non-Tailwind demos */
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
+  [data-demo]:not([data-demo="tailwind"]) * {
+    all: revert-layer;
   }
-  body {
-    @apply font-sans bg-background text-foreground;
+
+  [data-demo="tailwind"] {
+    --text-sm--letter-spacing: 0em;
+    --text-md--letter-spacing: 0em;
   }
+}
+
+@layer all {
   html {
-    @apply font-sans;
+    /* Stable scrollbar */
+    overflow-y: scroll;
+    word-break: break-word;
+  }
+
+  body {
+    font-synthesis: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Debugging red text? You just forgot to set or inherit color in your demo. */
+  :where([data-demo]) {
+    color: red;
+  }
+  /* Controls usually have #000 text that needs to be explicitly overridden; only Tailwind reset handles it */
+  :where([data-demo]:not([data-demo="tailwind"])) :where(button, input, textarea) {
+    color: red;
   }
 }

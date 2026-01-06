@@ -1,5 +1,4 @@
 ---
-import Logos from "@/components/astro/Logos.astro";
 import StyleSwitch from "@/components/astro/StyleSwitch.astro";
 import CollapseSwitch from "@/components/astro/CollapseSwitch.astro";
 import Layout from "./Layout.astro";
@@ -7,12 +6,20 @@ import Layout from "./Layout.astro";
 
 <Layout>
   <div
-    class="dark min-h-screen bg-background text-foreground selection:bg-foreground selection:text-background relative overflow-hidden py-8 px-4 sm:px-8 md:px-16 flex w-full flex-col items-center"
+    class="dark min-h-screen bg-background text-foreground selection:bg-foreground selection:text-background relative py-8 px-4 sm:px-8 md:px-16 flex w-full flex-col items-center"
   >
-    <main class="relative z-10 max-w-8xl w-full space-y-4 font-sans">
-      <header class="space-y-4 mb-12 flex flex-col gap-4">
+    <main class="relative z-10 max-w-6xl w-full space-y-4 font-sans">
+      <header
+        id="app-header"
+        class="group space-y-4 mb-12 flex flex-col gap-4 sticky top-0 z-20 bg-background/90 backdrop-blur supports-backdrop-filter:bg-background/80 py-5 transition-[padding] duration-200"
+      >
         <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <h1 class="text-3xl sm:text-3xl font-bold tracking-tight">Cross-Framework Comparison</h1>
+          <h1
+            id="app-title"
+            class="text-3xl sm:text-3xl font-bold tracking-tight group-data-[scrolled=true]:text-2xl transition-[font-size] duration-200"
+          >
+            Cross-Framework Comparison
+          </h1>
           <div
             class="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6 lg:shrink-0"
           >
@@ -20,117 +27,24 @@ import Layout from "./Layout.astro";
             <CollapseSwitch />
           </div>
         </div>
-
-        <Logos />
       </header>
 
-      <!-- <section class={`transition-all duration-300 ${openSections.dialog ? "mb-8" : "mb-2"}`}>
-      <button
-        onClick={() => toggleSection("dialog")}
-        class="flex items-center gap-3 px-4 py-1.5 rounded-full bg-secondary border border-border hover:bg-secondary/80 transition-colors mb-4"
-      >
-        <span class="text-sm font-bold tracking-tight">01. Dialog Series</span>
-        <ChevronDown
-          class={`size-4 transition-transform duration-300 ${
-            openSections.dialog ? "" : "-rotate-90"
-          }`}
-        />
-      </button>
-
-      {
-        openSections.dialog && (
-          <div class="space-y-6 pl-10 border-l-2 border-border/50">
-            <div class="space-y-4">
-              <h3 class="text-base font-semibold text-muted-foreground">Standard Dialog</h3>
-              <div class="grid grid-cols-[1fr_auto_1fr] gap-8 bg-white/[0.02] p-4 rounded-xl border border-white/5 items-center">
-                <DialogReactComp />
-                <div class="w-px h-12 bg-border/40" aria-hidden="true" />
-                <SolidPreview name="Dialog (Standard)" />
-              </div>
-            </div>
-            <div class="space-y-4">
-              <h3 class="text-base font-semibold text-muted-foreground">Alert Dialog</h3>
-              <div class="grid grid-cols-[1fr_auto_1fr] gap-8 bg-white/[0.02] p-4 rounded-xl border border-white/5 items-center">
-                <AlertDialogReactComp />
-                <div class="w-px h-12 bg-border/40" aria-hidden="true" />
-                <SolidPreview name="Dialog (Alert)" />
-              </div>
-            </div>
-          </div>
-        )
-      }
-    </section>
-
-    <section class={`transition-all duration-300 ${openSections.popover ? "mb-8" : "mb-2"}`}>
-      <button
-        onClick={() => toggleSection("popover")}
-        class="flex items-center gap-3 px-4 py-1.5 rounded-full bg-secondary border border-border hover:bg-secondary/80 transition-colors mb-4"
-      >
-        <span class="text-sm font-bold tracking-tight">02. Popover Series</span>
-        <ChevronDown
-          class={`size-4 transition-transform duration-300 ${
-            openSections.popover ? "" : "-rotate-90"
-          }`}
-        />
-      </button>
-
-      {
-        openSections.popover && (
-          <div class="space-y-6 pl-10 border-l-2 border-border/50">
-            <div class="space-y-4">
-              <h3 class="text-base font-semibold text-muted-foreground">Status Popover</h3>
-              <div class="grid grid-cols-[1fr_auto_1fr] gap-8 bg-white/[0.02] p-4 rounded-xl border border-white/5 items-center">
-                <PopoverReactComp />
-                <div class="w-px h-12 bg-border/40" aria-hidden="true" />
-                <SolidPreview name="Popover (Status)" />
-              </div>
-            </div>
-            <div class="space-y-4">
-              <h3 class="text-base font-semibold text-muted-foreground">Action Menu</h3>
-              <div class="grid grid-cols-[1fr_auto_1fr] gap-8 bg-white/[0.02] p-4 rounded-xl border border-white/5 items-center">
-                <PopoverMenuReactComp />
-                <div class="w-px h-12 bg-border/40" aria-hidden="true" />
-                <SolidPreview name="Popover (Menu)" />
-              </div>
-            </div>
-          </div>
-        )
-      }
-    </section>
-
-    <section
-      class={`transition-all duration-300 ${
-        openSections.disclosure ? "mb-12 space-y-6" : "mb-2 space-y-0"
-      }`}
-    >
-      <button
-        onClick={() => toggleSection("disclosure")}
-        class="flex items-center gap-3 px-4 py-1.5 rounded-full bg-secondary border border-border hover:bg-secondary/80 transition-colors group"
-      >
-        <span class="text-sm font-bold tracking-tight">03. Disclosure Components</span>
-        <ChevronDown
-          class={`size-4 transition-transform duration-300 ${
-            openSections.disclosure ? "" : "-rotate-90"
-          }`}
-        />
-      </button>
-
-      {
-        openSections.disclosure && (
-          <div class="space-y-8 pl-10 border-l-2 border-border/50 animate-in fade-in slide-in-from-top-4 duration-300">
-            <div class="space-y-4">
-              <h3 class="text-xl font-semibold tracking-tight">Accordion</h3>
-              <div class="grid grid-cols-[1fr_auto_1fr] gap-12 bg-white/[0.02] backdrop-blur-sm p-6 rounded-2xl border border-white/5 shadow-2xl items-center">
-                <AccordionReactComp />
-                <div class="w-px h-24 bg-border/40" aria-hidden="true" />
-                <SolidPreview name="Accordion (Disclosure)" />
-              </div>
-            </div>
-          </div>
-        )
-      }
-    </section> -->
       <slot />
     </main>
   </div>
 </Layout>
+
+<script>
+  if (typeof window !== "undefined") {
+    const header = document.getElementById("app-header")!;
+    const title = document.getElementById("app-title")!;
+
+    const onScroll = () => {
+      const scrolled = window.scrollY > 30;
+      header.dataset.scrolled = scrolled ? "true" : "false";
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+  }
+</script>

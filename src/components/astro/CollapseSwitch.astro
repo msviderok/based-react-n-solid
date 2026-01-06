@@ -1,13 +1,18 @@
-<div class="flex items-center gap-3 bg-secondary/30 px-3 py-1.5 rounded-full border border-border">
+<div
+  id="all-sections-chip"
+  class="flex items-center gap-3 px-3 py-2 text-[10px] rounded-sm hover:transition-all border border-slate-500/30 hover:border-slate-500/50 select-none cursor-pointer"
+  role="button"
+  aria-labelledby="all-sections-selector-label"
+>
   <span
     id="all-sections-selector-label"
-    class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
+    class="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground"
   >
     Expand All
   </span>
   <button
     id="all-sections-selector"
-    class="relative w-10 h-5 rounded-full transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-ring"
+    class="relative w-10 h-5 rounded-full transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-ring border border-border/60 bg-background/40"
     role="switch"
   >
     <div
@@ -21,21 +26,56 @@
 <script>
   import { toggleAllSections, allSectionsOpen } from "@/store";
 
+  const allSectionsChip = document.getElementById("all-sections-chip") as HTMLDivElement;
   const allSectionsSelector = document.getElementById("all-sections-selector")!;
   const allSectionsSelectorLabel = document.getElementById("all-sections-selector-label")!;
   const allSectionsSelectorIndicator = document.getElementById("all-sections-selector-indicator")!;
 
-  allSectionsSelector.addEventListener("click", toggleAllSections);
+  const updateChipGradient = (isOpen: boolean) => {
+    if (!allSectionsChip) return;
+
+    allSectionsChip.classList.remove(
+      "bg-gradient-to-t",
+      "from-slate-500/25",
+      "to-transparent",
+      "border-slate-500/40",
+      "border-slate-500/30",
+      "shadow-lg",
+      "shadow-slate-500/10"
+    );
+
+    if (isOpen) {
+      // Active: own slate accent, glow from bottom to top
+      allSectionsChip.classList.add(
+        "bg-gradient-to-t",
+        "from-slate-500/25",
+        "to-transparent",
+        "border-slate-500/40",
+        "shadow-lg",
+        "shadow-slate-500/10"
+      );
+    } else {
+      // Inactive: subtle slate border only, no gradient
+      allSectionsChip.classList.add("border-slate-500/30");
+    }
+  };
+
+  // Make the whole chip clickable, similar to the styling switch
+  allSectionsChip.addEventListener("click", toggleAllSections);
 
   allSectionsOpen.subscribe((value) => {
     allSectionsSelector.setAttribute("aria-checked", value.toString());
     allSectionsSelector.classList.toggle("bg-slate-500", value);
-    allSectionsSelector.classList.toggle("bg-muted", !value);
+    allSectionsSelector.classList.toggle("border-slate-500/80", value);
+    allSectionsSelector.classList.toggle("bg-background/40", !value);
+    allSectionsSelector.classList.toggle("border-border/60", !value);
 
     allSectionsSelectorIndicator.classList.toggle("translate-x-5", value);
     allSectionsSelectorIndicator.classList.toggle("translate-x-0", !value);
 
     allSectionsSelectorLabel.classList.toggle("text-slate-300", value);
     allSectionsSelectorLabel.classList.toggle("text-muted-foreground", !value);
+
+    updateChipGradient(value);
   });
 </script>

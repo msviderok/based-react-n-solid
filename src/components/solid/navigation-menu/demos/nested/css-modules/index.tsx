@@ -1,6 +1,5 @@
 /** @jsxImportSource solid-js */
 import { NavigationMenu } from "@msviderok/base-ui-solid/navigation-menu";
-import { A } from "@solidjs/router";
 import { type ComponentProps, For } from "solid-js";
 import styles from "./index.module.css";
 
@@ -98,7 +97,7 @@ function Link(props: NavigationMenu.Link.Props) {
         // Use the `render` prop to render your framework's Link component
         // for client-side routing.
         // e.g. `<A href={props.href} />` instead of `<a />`.
-        (props) => <A {...(props as any)} />
+        (props) => <a {...props} />
       }
       {...props}
     />

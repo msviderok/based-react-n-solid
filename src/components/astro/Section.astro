@@ -1,5 +1,4 @@
 ---
-import { ChevronDown } from "@lucide/astro";
 import { SolidComponent } from "@/components/solid";
 
 interface Props {
@@ -13,28 +12,49 @@ const { compName, variants } = Astro.props;
 <astro-section data-component={compName}>
   <section data-component={compName} class="transition-all duration-200 mb-4 flex-auto">
     <button
-      class="flex items-center gap-3 hover:bg-secondary/80 transition-colors mb-4 bg-secondary/30 px-3 py-1.5 rounded-full border border-border text-muted-foreground"
+      class="flex items-center px-3 py-2 font-mono text-xs rounded-sm hover:transition-all border mb-4"
     >
-      <span class="text-sm font-bold tracking-tight capitalize">
-        {compName.replace("-", " ")}
-      </span>
-      <ChevronDown class="size-4 transition-transform duration-150" />
+      <div class="flex items-center">
+        <span data-accent="left" class="text-blue-400/30 mr-0.5">&lt;</span>
+        <span class="text-foreground font-mono">
+          {
+            compName
+              .split("-")
+              .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+              .join("")
+          }
+        </span>
+        <span data-accent="right" class="text-blue-400/40 ml-0.5">/&gt;</span>
+      </div>
     </button>
 
-    <div class="space-y-6 pl-10 border-l-2 border-border/50 py-4">
+    <div
+      data-panel
+      class="comparison-container space-y-6 pl-4 sm:pl-6 md:pl-10 border-l-2 border-border/50 py-4"
+    >
       {
         variants.map((variant) => (
           <div class="space-y-4">
-            <h3 class="text-base font-semibold text-muted-foreground capitalize">
+            <h3 class="text-base font-semibold text-muted-foreground capitalize border-border bg-gray-100/60 px-2 py-1 rounded-full  pb-2">
               {variant.replace("-", " ")}
             </h3>
-            <div class="grid grid-cols-[1fr_auto_1fr] gap-8 bg-white/[0.02] p-4 py-8 rounded-xl border border-white/5 items-center">
-              <div class="flex flex-1 items-center justify-center">
-                <SolidComponent component={compName} type={variant} client:only="solid-js" />
+            <div class="comparison-grid grid gap-6 bg-white/[0.03] p-4 py-6 sm:py-8 rounded-xl border border-white/5 items-stretch">
+              <div class="flex flex-1 flex-col gap-2">
+                <span class="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground/70">
+                  Solid
+                </span>
+                <div class="flex flex-1 items-center justify-center">
+                  <SolidComponent component={compName} type={variant} client:only="solid-js" />
+                </div>
               </div>
-              <div class="w-px h-12 bg-border/40" aria-hidden="true" />
-              <div class="flex flex-1 items-center justify-center">
-                <SolidComponent component={compName} type={variant} client:only="solid-js" />
+              <div class="comparison-divider bg-border/40 w-full h-px my-2" aria-hidden="true" />
+              <div class="flex flex-1 flex-col gap-2">
+                <span class="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground/70">
+                  React
+                </span>
+                <div class="flex flex-1 items-center justify-center">
+                  <SolidComponent component={compName} type={variant} client:only="solid-js" />
+                </div>
               </div>
             </div>
           </div>
@@ -45,28 +65,113 @@ const { compName, variants } = Astro.props;
 </astro-section>
 
 <script>
-  import { toggleSection, allSectionsOpen, sections } from "@/store";
+  import { toggleSection, allSectionsOpen, sections, styling } from "@/store";
   import { effect, computed } from "nanostores";
 
   class AstroSection extends HTMLElement {
     connectedCallback() {
       const compName = this.dataset.component!;
-      const button = this.querySelector("button")!;
-      const icon = this.querySelector("svg")!;
-      const panel = this.querySelector("div")!;
+      const button = this.querySelector("button") as HTMLButtonElement;
+      const leftAccent = this.querySelector("span[data-accent='left']") as HTMLSpanElement;
+      const rightAccent = this.querySelector("span[data-accent='right']") as HTMLSpanElement;
+      const panel = this.querySelector("div[data-panel]")! as HTMLDivElement;
       const store = computed(sections, (sections) => sections[compName]);
 
       button.addEventListener("click", () => toggleSection(compName));
-      effect([store, allSectionsOpen], ({ open }, allOpen) => {
+      effect([store, allSectionsOpen, styling], ({ open }, allOpen, style) => {
         const isOpen = open || allOpen;
+        const isCssModules = style === "CssModules";
 
         panel.style.display = isOpen ? "block" : "none";
         button.classList.toggle("mb-8", isOpen);
         button.setAttribute("aria-checked", isOpen.toString());
-        icon.classList.toggle("-rotate-90", isOpen);
+
+        // Reset gradient / border / shadow classes before applying state-specific ones
+        button.classList.remove(
+          "bg-gradient-to-r",
+          "bg-gradient-to-t",
+          "from-blue-400/5",
+          "border-blue-400/20",
+          "from-purple-400/5",
+          "border-purple-400/20",
+          "from-blue-500/30",
+          "from-blue-500/20",
+          "from-transparent",
+          "to-transparent",
+          "border-blue-500/20",
+          "shadow-lg",
+          "shadow-blue-500/10",
+          "from-purple-500/30",
+          "from-purple-500/20",
+          "border-purple-500/20",
+          "shadow-purple-500/10"
+        );
+
+        if (isOpen) {
+          // Gradient only for active pills, stronger at the bottom (to top)
+          if (isCssModules) {
+            button.classList.add(
+              "bg-gradient-to-t",
+              "from-purple-500/25",
+              "to-transparent",
+              "border-purple-500/20",
+              "shadow-lg",
+              "shadow-purple-500/10"
+            );
+          } else {
+            button.classList.add(
+              "bg-gradient-to-t",
+              "from-blue-500/25",
+              "to-transparent",
+              "border-blue-500/20",
+              "shadow-lg",
+              "shadow-blue-500/10"
+            );
+          }
+        } else {
+          // Inactive pills: no gradient, just subtle borders
+          if (isCssModules) {
+            button.classList.add("border-purple-400/20");
+          } else {
+            button.classList.add("border-blue-400/20");
+          }
+        }
+      });
+
+      styling.subscribe((value) => {
+        const isCssModules = value === "CssModules";
+
+        leftAccent.classList.toggle("text-blue-400/30", !isCssModules);
+        leftAccent.classList.toggle("text-purple-400/30", isCssModules);
+
+        rightAccent.classList.toggle("text-blue-400/40", !isCssModules);
+        rightAccent.classList.toggle("text-purple-400/40", isCssModules);
       });
     }
   }
 
   customElements.define("astro-section", AstroSection);
 </script>
+
+<style>
+  /* Make the section a container for container queries */
+  astro-section {
+    container-type: inline-size;
+    container-name: section-container;
+  }
+
+  /* Container query: when the container is wide enough, switch to side-by-side layout */
+  @container section-container (min-width: 48rem) {
+    .comparison-grid {
+      grid-template-columns: 1fr auto 1fr;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .comparison-divider {
+      width: 1px;
+      height: 3rem;
+      margin: 0;
+    }
+  }
+</style>
