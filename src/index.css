@@ -127,8 +127,3 @@
     @apply font-sans;
   }
 }
-
-/* Layout mode styles */
-#components-root {
-  @apply space-y-4;
-}

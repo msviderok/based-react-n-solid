@@ -1,11 +1,26 @@
 ---
-import Section from "@/components/astro/Section.astro";
+import { ReactComponent } from "@/components/react";
+import Section from "@/components/react/Section";
+import { SolidComponent } from "@/components/solid";
 import Layout from "@/Layout.astro";
 import { COMPLIST } from "@/store";
 ---
 
 <Layout>
-  <div id="components-root">
-    {COMPLIST.map(([compName, variants]) => <Section compName={compName} variants={variants} />)}
-  </div>
+  {
+    COMPLIST.map(([compName, variants]) => (
+      <Section.Root compName={compName} client:only="react">
+        {variants.map((variant) => (
+          <Section.Variant name={variant}>
+            <Section.VariantItem name="Solid">
+              <SolidComponent component={compName} type={variant} client:only="solid-js" />
+            </Section.VariantItem>
+            <Section.VariantItem name="React">
+              <ReactComponent component={compName} type={variant} client:only="react" />
+            </Section.VariantItem>
+          </Section.Variant>
+        ))}
+      </Section.Root>
+    ))
+  }
 </Layout>
