@@ -7,19 +7,48 @@ interface Section {
   variants: string[];
 }
 
-export async function fetchComplist() {
-  return fetch(`./complist.json`).then((res) => res.json() as Promise<[string, string[]][]>);
-}
+const COMPLIST: [string, string[]][] = [
+  ["accordion", ["hero"]],
+  ["alert-dialog", ["hero"]],
+  ["avatar", ["hero"]],
+  ["checkbox", ["hero"]],
+  ["checkbox-group", ["hero", "parent", "nested", "form"]],
+  ["collapsible", ["hero"]],
+  ["context-menu", ["hero", "submenu"]],
+  ["dialog", ["hero", "nested", "close-confirmation"]],
+  ["field", ["hero"]],
+  ["fieldset", ["hero"]],
+  ["form", ["hero", "zod"]],
+  ["input", ["hero"]],
+  ["menu", ["hero", "checkbox-items", "group-labels", "open-on-hover", "radio-items", "submenu"]],
+  ["menubar", ["hero"]],
+  ["meter", ["hero"]],
+  ["navigation-menu", ["hero", "nested"]],
+  ["number-field", ["hero"]],
+  ["popover", ["hero"]],
+  ["preview-card", ["hero"]],
+  ["progress", ["hero"]],
+  ["radio", ["hero"]],
+  ["scroll-area", ["hero"]],
+  ["select", ["hero"]],
+  ["separator", ["hero"]],
+  ["slider", ["hero", "range-slider"]],
+  ["switch", ["hero"]],
+  ["tabs", ["hero"]],
+  ["toast", ["hero", "custom", "position", "promise", "undo"]],
+  ["toggle", ["hero"]],
+  ["toggle-group", ["hero"]],
+  ["toolbar", ["hero"]],
+  ["tooltip", ["hero"]],
+];
 
-async function getInitialSections() {
-  const complist = await fetchComplist();
-  return complist.reduce<SectionsState>((acc, [compName, variants]) => {
+const initialSections: SectionsState = COMPLIST.reduce<SectionsState>(
+  (acc, [compName, variants]) => {
     acc[compName] = { open: false, variants };
     return acc;
-  }, {});
-}
-
-const initialSections = await getInitialSections();
+  },
+  {}
+);
 
 export const styling = persistentAtom<"CssModules" | "Tailwind">("styling", "CssModules");
 export const sections = persistentAtom<SectionsState>("sections", initialSections, {
