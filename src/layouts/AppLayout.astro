@@ -1,12 +1,14 @@
 ---
 import StyleSwitch from "@/components/astro/StyleSwitch.astro";
 import CollapseSwitch from "@/components/astro/CollapseSwitch.astro";
+import LayoutSwitch from "@/components/astro/LayoutSwitch.astro";
 import Layout from "./Layout.astro";
 ---
 
 <Layout>
   <div
-    class="dark min-h-screen bg-background text-foreground selection:bg-foreground selection:text-background relative py-8 px-4 sm:px-8 md:px-16 flex w-full flex-col items-center"
+    id="app-root"
+    class="dark min-h-screen bg-background text-foreground selection:bg-foreground selection:text-background relative py-8 px-4 sm:px-8 md:px-16 flex w-full flex-col items-center transition-colors duration-300"
   >
     <main class="relative z-10 max-w-6xl w-full space-y-4 font-sans">
       <header
@@ -20,11 +22,10 @@ import Layout from "./Layout.astro";
           >
             Cross-Framework Comparison
           </h1>
-          <div
-            class="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6 lg:shrink-0"
-          >
+          <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6 lg:shrink-0">
             <StyleSwitch />
             <CollapseSwitch />
+            <LayoutSwitch client:load />
           </div>
         </div>
       </header>
@@ -35,7 +36,10 @@ import Layout from "./Layout.astro";
 </Layout>
 
 <script>
+  import { styling } from "@/store";
+
   if (typeof window !== "undefined") {
+    const root = document.getElementById("app-root")!;
     const header = document.getElementById("app-header")!;
     const title = document.getElementById("app-title")!;
 
@@ -46,5 +50,27 @@ import Layout from "./Layout.astro";
 
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
+
+    // Extremely subtle solid global background tint based on styling selection
+    styling.subscribe((value) => {
+      // Reset any previous custom color, keep Tailwind bg-background as base
+      root.style.backgroundImage = "";
+      root.style.backgroundColor = "";
+      header.style.backgroundColor = "";
+
+      if (value === "Tailwind") {
+        // Barely blue-leaning black
+        const bg = "rgb(6, 8, 12)";
+        root.style.backgroundColor = bg;
+        header.style.backgroundColor = "rgba(6, 8, 12, 0.96)";
+      }
+
+      if (value === "CssModules") {
+        // Barely purple-leaning black
+        const bg = "rgb(8, 6, 12)";
+        root.style.backgroundColor = bg;
+        header.style.backgroundColor = "rgba(8, 6, 12, 0.96)";
+      }
+    });
   }
 </script>

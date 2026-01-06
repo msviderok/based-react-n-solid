@@ -8,7 +8,12 @@ const complist = await fetch(`${import.meta.env.VERCEL_URL}/complist.json`).then
 ---
 
 <AppLayout>
-  <div class="">
-    {complist.map(([compName, variants]) => <Section compName={compName} variants={variants} />)}
+  <div
+    id="components-root"
+    class="space-y-4 md:space-y-0 md:columns-2 xl:columns-3 md:gap-6"
+  >
+    {complist.map(([compName, variants]) => (
+      <Section compName={compName} variants={variants} />
+    ))}
   </div>
 </AppLayout>

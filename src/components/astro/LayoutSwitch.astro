@@ -1,0 +1,82 @@
+---
+import { LayoutList, LayoutGrid } from "@lucide/astro";
+---
+
+<div
+  id="layout-switch-root"
+  class="inline-flex items-center gap-1 p-1 rounded-sm border border-slate-500/30 bg-slate-900/40"
+  role="group"
+  aria-label="Layout view"
+>
+  <button
+    id="list-view-button"
+    type="button"
+    class="flex items-center justify-center p-2 rounded-sm transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-ring"
+    aria-label="List view"
+    aria-pressed="false"
+  >
+    <LayoutList class="size-4" />
+  </button>
+  <button
+    id="grid-view-button"
+    type="button"
+    class="flex items-center justify-center p-2 rounded-sm transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-ring"
+    aria-label="Grid view"
+    aria-pressed="false"
+  >
+    <LayoutGrid class="size-4" />
+  </button>
+</div>
+
+<script>
+  import { layoutMode } from "@/stores/layout";
+
+  const switchElement = document.getElementById("layout-switch-root") as HTMLDivElement | null;
+  if (!switchElement) {
+    console.warn("[LayoutSwitch] Root element not found");
+  } else {
+    const listButton = switchElement.querySelector("#list-view-button") as HTMLButtonElement;
+    const gridButton = switchElement.querySelector("#grid-view-button") as HTMLButtonElement;
+
+    listButton.addEventListener("click", () => {
+      layoutMode.set("list");
+    });
+
+    gridButton.addEventListener("click", () => {
+      layoutMode.set("grid");
+    });
+
+    const applyLayout = (value: "grid" | "list") => {
+      const isGrid = value === "grid";
+
+      const componentsRoot = document.getElementById("components-root");
+      if (componentsRoot) {
+        componentsRoot.classList.toggle("md:columns-2", isGrid);
+        componentsRoot.classList.toggle("xl:columns-3", isGrid);
+        componentsRoot.classList.toggle("md:gap-6", isGrid);
+        componentsRoot.classList.toggle("md:space-y-0", isGrid);
+        componentsRoot.classList.toggle("space-y-4", !isGrid);
+      }
+
+      // Update button states
+      listButton.setAttribute("aria-pressed", (!isGrid).toString());
+      gridButton.setAttribute("aria-pressed", isGrid.toString());
+
+      // Active button styling
+      if (isGrid) {
+        listButton.classList.remove("bg-blue-500/20", "text-blue-400");
+        listButton.classList.add("text-muted-foreground", "hover:text-foreground");
+        gridButton.classList.remove("text-muted-foreground", "hover:text-foreground");
+        gridButton.classList.add("bg-blue-500/20", "text-blue-400");
+      } else {
+        gridButton.classList.remove("bg-blue-500/20", "text-blue-400");
+        gridButton.classList.add("text-muted-foreground", "hover:text-foreground");
+        listButton.classList.remove("text-muted-foreground", "hover:text-foreground");
+        listButton.classList.add("bg-blue-500/20", "text-blue-400");
+      }
+    };
+
+    layoutMode.subscribe(applyLayout);
+    applyLayout(layoutMode.get());
+  }
+</script>

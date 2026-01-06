@@ -10,8 +10,13 @@ const { compName, variants } = Astro.props;
 ---
 
 <astro-section data-component={compName}>
-  <section data-component={compName} class="transition-all duration-200 mb-4 flex-auto">
+  <section
+    data-section-root
+    data-component={compName}
+    class="transition-all duration-200 mb-4 flex-auto"
+  >
     <button
+      data-section-button
       class="flex items-center px-3 py-2 font-mono text-xs rounded-sm hover:transition-all border mb-4"
     >
       <div class="flex items-center">
@@ -28,28 +33,29 @@ const { compName, variants } = Astro.props;
       </div>
     </button>
 
-    <div
-      data-panel
-      class="comparison-container space-y-6 pl-4 sm:pl-6 md:pl-10 border-l-2 border-border/50 py-4"
-    >
+    <div data-panel class="comparison-container space-y-8 py-6">
       {
         variants.map((variant) => (
           <div class="space-y-4">
-            <h3 class="text-base font-semibold text-muted-foreground capitalize border-border bg-gray-100/60 px-2 py-1 rounded-full  pb-2">
-              {variant.replace("-", " ")}
+            <h3
+              data-variant-label
+              class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground/60"
+            >
+              <span class="h-px w-6 bg-border/40" aria-hidden="true" />
+              <span>{variant.replace("-", " ")}</span>
             </h3>
-            <div class="comparison-grid grid gap-6 bg-white/[0.03] p-4 py-6 sm:py-8 rounded-xl border border-white/5 items-stretch">
+            <div class="comparison-grid grid gap-6 bg-black/40/80 p-4 py-6 sm:py-8 rounded-md border border-white/5 shadow-[0_0_0_1px_rgba(148,163,184,0.15)]">
               <div class="flex flex-1 flex-col gap-2">
-                <span class="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground/70">
+                <span class="text-[11px] font-mono font-semibold uppercase tracking-[0.2em] text-muted-foreground/70">
                   Solid
                 </span>
                 <div class="flex flex-1 items-center justify-center">
                   <SolidComponent component={compName} type={variant} client:only="solid-js" />
                 </div>
               </div>
-              <div class="comparison-divider bg-border/40 w-full h-px my-2" aria-hidden="true" />
+              <div class="comparison-divider bg-border/40 w-full h-px my-3" aria-hidden="true" />
               <div class="flex flex-1 flex-col gap-2">
-                <span class="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground/70">
+                <span class="text-[11px] font-mono font-semibold uppercase tracking-[0.2em] text-muted-foreground/70">
                   React
                 </span>
                 <div class="flex flex-1 items-center justify-center">
@@ -66,6 +72,7 @@ const { compName, variants } = Astro.props;
 
 <script>
   import { toggleSection, allSectionsOpen, sections, styling } from "@/store";
+  import { layoutMode } from "@/stores/layout";
   import { effect, computed } from "nanostores";
 
   class AstroSection extends HTMLElement {
@@ -75,15 +82,41 @@ const { compName, variants } = Astro.props;
       const leftAccent = this.querySelector("span[data-accent='left']") as HTMLSpanElement;
       const rightAccent = this.querySelector("span[data-accent='right']") as HTMLSpanElement;
       const panel = this.querySelector("div[data-panel]")! as HTMLDivElement;
+      const variantLabels = this.querySelectorAll(
+        "h3[data-variant-label]"
+      ) as NodeListOf<HTMLHeadingElement>;
       const store = computed(sections, (sections) => sections[compName]);
 
-      button.addEventListener("click", () => toggleSection(compName));
-      effect([store, allSectionsOpen, styling], ({ open }, allOpen, style) => {
+      const sectionRoot = this.querySelector("[data-section-root]") as HTMLElement;
+
+      // Even / odd background per component to visually group variants
+      const allSections = Array.from(document.querySelectorAll<HTMLElement>("astro-section"));
+      const sectionIndex = allSections.indexOf(this);
+      if (sectionIndex !== -1 && sectionRoot) {
+        const isEven = sectionIndex % 2 === 0;
+        // Store which background class this section should use; applied only in grid mode
+        const bgClass = isEven ? "bg-slate-900/40" : "bg-slate-900/20";
+        sectionRoot.dataset.bgClass = bgClass;
+      }
+
+      button.addEventListener("click", () => {
+        // Don't toggle in grid mode
+        if (layoutMode.get() === "grid") return;
+        toggleSection(compName);
+      });
+      effect([store, allSectionsOpen, styling, layoutMode], ({ open }, allOpen, style, layout) => {
         const isOpen = open || allOpen;
         const isCssModules = style === "CssModules";
+        const isGrid = layout === "grid";
 
-        panel.style.display = isOpen ? "block" : "none";
-        button.classList.toggle("mb-8", isOpen);
+        if (isGrid) {
+          // In grid mode, panels are always open and pills don't expand/collapse
+          panel.style.display = "block";
+          button.classList.remove("mb-8");
+        } else {
+          panel.style.display = isOpen ? "block" : "none";
+          button.classList.toggle("mb-8", isOpen);
+        }
         button.setAttribute("aria-checked", isOpen.toString());
 
         // Reset gradient / border / shadow classes before applying state-specific ones
@@ -96,36 +129,47 @@ const { compName, variants } = Astro.props;
           "border-purple-400/20",
           "from-blue-500/30",
           "from-blue-500/20",
+          "from-blue-500/15",
           "from-transparent",
           "to-transparent",
           "border-blue-500/20",
+          "border-blue-500/15",
           "shadow-lg",
           "shadow-blue-500/10",
+          "shadow-blue-500/5",
           "from-purple-500/30",
           "from-purple-500/20",
+          "from-purple-500/15",
           "border-purple-500/20",
-          "shadow-purple-500/10"
+          "border-purple-500/15",
+          "shadow-purple-500/10",
+          "shadow-purple-500/5"
         );
 
+        // In grid mode, don't apply any gradients or borders
+        if (isGrid) {
+          return;
+        }
+
         if (isOpen) {
-          // Gradient only for active pills, stronger at the bottom (to top)
+          // Gradient only for active pills, softer at the bottom (to top)
           if (isCssModules) {
             button.classList.add(
               "bg-gradient-to-t",
-              "from-purple-500/25",
+              "from-purple-500/15",
               "to-transparent",
-              "border-purple-500/20",
+              "border-purple-500/15",
               "shadow-lg",
-              "shadow-purple-500/10"
+              "shadow-purple-500/5"
             );
           } else {
             button.classList.add(
               "bg-gradient-to-t",
-              "from-blue-500/25",
+              "from-blue-500/15",
               "to-transparent",
-              "border-blue-500/20",
+              "border-blue-500/15",
               "shadow-lg",
-              "shadow-blue-500/10"
+              "shadow-blue-500/5"
             );
           }
         } else {
@@ -146,6 +190,57 @@ const { compName, variants } = Astro.props;
 
         rightAccent.classList.toggle("text-blue-400/40", !isCssModules);
         rightAccent.classList.toggle("text-purple-400/40", isCssModules);
+
+        // Sync variant labels with current styling accent, very subtly (typography only)
+        variantLabels.forEach((label) => {
+          label.classList.remove("text-blue-300", "text-purple-300");
+
+          if (isCssModules) {
+            label.classList.add("text-purple-300");
+          } else {
+            label.classList.add("text-blue-300");
+          }
+        });
+      });
+
+      // Switch visual treatment between list vs grid layouts
+      const buttonDiv = button.querySelector("div") as HTMLDivElement;
+
+      layoutMode.subscribe((mode) => {
+        const isGrid = mode === "grid";
+
+        if (isGrid) {
+          // Grid mode: elevated card with no pill styling
+          sectionRoot.classList.add("rounded-xl", "shadow-lg", "p-4", "px-5", "pb-6");
+          sectionRoot.classList.remove("mb-4");
+
+          // Apply per-section background only in grid mode
+          const bgClass = sectionRoot.dataset.bgClass;
+          if (bgClass) {
+            sectionRoot.classList.add(bgClass);
+          }
+
+          button.classList.remove("mb-8", "px-3", "py-2", "border", "rounded-sm");
+          button.classList.add("cursor-default", "p-2", "px-3", "mb-3", "pointer-events-none");
+
+          buttonDiv.classList.add("opacity-80", "uppercase", "tracking-[0.18em]", "text-xs");
+
+          panel.classList.add("mt-2");
+        } else {
+          // List mode: restore original styling
+          sectionRoot.classList.remove("rounded-xl", "shadow-lg", "p-4", "px-5", "pb-6");
+          sectionRoot.classList.add("mb-4");
+
+          // Remove any grid-only background classes so list view stays flat
+          sectionRoot.classList.remove("bg-slate-900/40", "bg-slate-900/20");
+
+          button.classList.remove("cursor-default", "p-2", "px-3", "mb-3", "pointer-events-none");
+          button.classList.add("px-3", "py-2", "border", "rounded-sm");
+
+          buttonDiv.classList.remove("opacity-80", "uppercase", "tracking-[0.18em]", "text-xs");
+
+          panel.classList.remove("mt-2");
+        }
       });
     }
   }
@@ -154,24 +249,31 @@ const { compName, variants } = Astro.props;
 </script>
 
 <style>
-  /* Make the section a container for container queries */
   astro-section {
+    /* Make each section act as its own sizing container */
     container-type: inline-size;
     container-name: section-container;
+
+    /* Play nicely in multi-column / masonry-style layouts */
+    break-inside: avoid;
+    page-break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+    margin-bottom: 1.5rem;
+    display: block;
   }
 
-  /* Container query: when the container is wide enough, switch to side-by-side layout */
-  @container section-container (min-width: 48rem) {
+  /* Container query: when the section column is wide enough, switch to side-by-side layout */
+  @container section-container (min-width: 36rem) {
     .comparison-grid {
-      grid-template-columns: 1fr auto 1fr;
-      gap: 2rem;
-      align-items: center;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      gap: 1.5rem;
+      align-items: stretch;
     }
 
     .comparison-divider {
       width: 1px;
-      height: 3rem;
-      margin: 0;
+      height: 100%;
+      margin: 0 auto;
     }
   }
 </style>

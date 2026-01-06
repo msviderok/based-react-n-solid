@@ -22,7 +22,7 @@ async function getInitialSections() {
 const initialSections = await getInitialSections();
 
 export const styling = persistentAtom<"CssModules" | "Tailwind">("styling", "CssModules");
-export const sections = persistentAtom("sections", initialSections, {
+export const sections = persistentAtom<SectionsState>("sections", initialSections, {
   encode: JSON.stringify,
   decode: JSON.parse,
 });

@@ -25,6 +25,7 @@
 
 <script>
   import { toggleAllSections, allSectionsOpen } from "@/store";
+  import { layoutMode } from "@/stores/layout";
 
   const allSectionsChip = document.getElementById("all-sections-chip") as HTMLDivElement;
   const allSectionsSelector = document.getElementById("all-sections-selector")!;
@@ -36,23 +37,23 @@
 
     allSectionsChip.classList.remove(
       "bg-gradient-to-t",
-      "from-slate-500/25",
+      "from-slate-500/15",
       "to-transparent",
-      "border-slate-500/40",
+      "border-slate-500/30",
       "border-slate-500/30",
       "shadow-lg",
-      "shadow-slate-500/10"
+      "shadow-slate-500/5"
     );
 
     if (isOpen) {
       // Active: own slate accent, glow from bottom to top
       allSectionsChip.classList.add(
         "bg-gradient-to-t",
-        "from-slate-500/25",
+        "from-slate-500/15",
         "to-transparent",
-        "border-slate-500/40",
+        "border-slate-500/30",
         "shadow-lg",
-        "shadow-slate-500/10"
+        "shadow-slate-500/5"
       );
     } else {
       // Inactive: subtle slate border only, no gradient
@@ -61,7 +62,10 @@
   };
 
   // Make the whole chip clickable, similar to the styling switch
-  allSectionsChip.addEventListener("click", toggleAllSections);
+  allSectionsChip.addEventListener("click", () => {
+    if (layoutMode.get() === "grid") return;
+    toggleAllSections();
+  });
 
   allSectionsOpen.subscribe((value) => {
     allSectionsSelector.setAttribute("aria-checked", value.toString());
@@ -77,5 +81,16 @@
     allSectionsSelectorLabel.classList.toggle("text-muted-foreground", !value);
 
     updateChipGradient(value);
+  });
+
+  // Disable the control when in grid mode (panels are always open there)
+  layoutMode.subscribe((mode) => {
+    const isGrid = mode === "grid";
+
+    allSectionsChip.classList.toggle("opacity-40", isGrid);
+    allSectionsChip.classList.toggle("cursor-not-allowed", isGrid);
+    allSectionsChip.classList.toggle("cursor-pointer", !isGrid);
+
+    allSectionsSelector.setAttribute("aria-disabled", isGrid.toString());
   });
 </script>
