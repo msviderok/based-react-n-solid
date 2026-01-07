@@ -1,80 +1,68 @@
-/** @jsxImportSource react */
-import { allSectionsOpen, sections, styling, toggleSection } from "@/store";
-import { cn } from "@/utils";
-import { useStore } from "@nanostores/react";
-import { useMemo, type PropsWithChildren } from "react";
+import { LogoReact } from "@/components/react/LogoReact";
+import { LogoSolid } from "@/components/react/LogoSolid";
+import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
 
-interface Props {
-  compName: string;
-}
-
-function Root({ compName, children }: PropsWithChildren<Props>) {
-  const sectionsStore = useStore(sections);
-  const allOpen = useStore(allSectionsOpen);
-  const currentStyling = useStore(styling);
-
-  const sectionState = useMemo(() => sectionsStore[compName], [sectionsStore, compName]);
-  const isOpen = useMemo(() => sectionState?.open || allOpen, [sectionState, allOpen]);
-  const isCssModules = useMemo(() => currentStyling === "CssModules", [currentStyling]);
-
-  const formatComponentName = (name: string) => {
-    return name
-      .split("-")
-      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-      .join("");
-  };
-
+function Root(props: { component: string; children: React.ReactNode }) {
+  const sectionName = props.component.toLowerCase().replace(" ", "-");
   return (
-    <section className="transition-all duration-200 mb-4 flex-auto">
-      <button
-        className={cn(
-          "flex items-center px-3 py-2 font-mono text-xs rounded-sm hover:transition-all border mb-4 transition-all duration-200",
-          isOpen && "mb-8 bg-linear-to-t to-transparent shadow-lg",
-          isOpen && isCssModules && "from-purple-500/15 border-purple-500/15 shadow-purple-500/5",
-          isOpen && !isCssModules && "from-blue-500/15 border-blue-500/15 shadow-blue-500/5",
-          !isOpen && isCssModules && "border-purple-400/20",
-          !isOpen && !isCssModules && "border-blue-400/20"
-        )}
-        onClick={() => toggleSection(compName)}
-        aria-checked={isOpen}
-      >
-        <div className="flex items-center">
-          <span className={cn("mr-0.5", isCssModules ? "text-purple-400/30" : "text-blue-400/30")}>
-            &lt;
-          </span>
-          <span className="text-foreground font-mono">{formatComponentName(compName)}</span>
-          <span className={cn("ml-0.5", isCssModules ? "text-purple-400/40" : "text-blue-400/40")}>
-            /&gt;
-          </span>
+    <section id={props.component} className="scroll-mt-24 mb-16">
+      <div className="mb-6">
+        <div className="flex items-center gap-3 mb-2">
+          <h2 className="text-3xl font-bold text-foreground/80 sticky top-0 left-0">
+            {sectionName.charAt(0).toUpperCase() + sectionName.slice(1)}
+          </h2>
         </div>
-      </button>
+      </div>
 
-      <div className="space-y-8 py-6">{children}</div>
+      <div className="space-y-12 flex flex-col gap-4">{props.children}</div>
     </section>
   );
 }
 
-function Variant({ name, children }: { name: string; children: React.ReactNode }) {
+function Variant(props: { variant: string; children: React.ReactNode }) {
+  const variantName = props.variant.replace("-", " ");
   return (
-    <div className="space-y-4">
-      <h3 className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground/60">
-        <span className="h-px w-6 bg-border/40" aria-hidden="true" />
-        <span>{name.replace("-", " ")}</span>
+    <div className="border border-border rounded-lg overflow-hidden bg-card shadow-sm flex flex-col shrink-0 relative">
+      <h3 className="font-semibold text-foreground py-3 px-4">
+        {variantName.charAt(0).toUpperCase() + variantName.slice(1)}
       </h3>
-      <div className="comparison-grid grid gap-6 bg-black/40/80 p-4 py-6 sm:py-8 rounded-md border border-white/5 shadow-[0_0_0_1px_rgba(148,163,184,0.15)]">
-        {children}
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 relative">
+        <Separator
+          orientation="vertical"
+          className="absolute top-0 left-1/2 -translate-x-px h-full w-0! bg-muted border-dashed border-0 border-l border-l-muted-background opacity-30"
+        />
+        {props.children}
       </div>
     </div>
   );
 }
 
-function VariantItem({ name, children }: { name: string; children: React.ReactNode }) {
+function VariantSolid(props: { children: React.ReactNode }) {
   return (
-    <div className="flex flex-1 flex-col gap-2">
-      <span className="text-[11px] font-mono font-semibold uppercase tracking-[0.2em] text-muted-foreground/70">
-        {name}
-      </span>
-      <div className="flex flex-1 items-center justify-center">{children}</div>
+    <div className="border-r border-border last:border-r-0">
+      <div className="bg-solid/20 border-b border-border px-4 py-2 flex items-center gap-2 h-10 overflow-hidden">
+        <LogoSolid className="size-4" />
+        <span className="text-xs font-semibold text-foreground uppercase tracking-wider">
+          Solid
+        </span>
+      </div>
+      <div className="p-6 flex justify-center">{props.children}</div>
+    </div>
+  );
+}
+
+function VariantReact(props: { children: React.ReactNode }) {
+  return (
+    <div>
+      <div className="bg-react/20 border-b border-border px-4 py-2 flex items-center gap-2 h-10 overflow-hidden">
+        <LogoReact className="size-4" />
+        <span className="text-xs font-semibold text-foreground uppercase tracking-wider">
+          React
+        </span>
+      </div>
+      <div className="p-6 flex justify-center">{props.children}</div>
     </div>
   );
 }
@@ -82,5 +70,6 @@ function VariantItem({ name, children }: { name: string; children: React.ReactNo
 export default {
   Root,
   Variant,
-  VariantItem,
+  VariantSolid,
+  VariantReact,
 };

@@ -1,26 +1,29 @@
 ---
-import { ReactComponent } from "@/components/react";
 import Section from "@/components/react/Section";
 import { SolidComponent } from "@/components/solid";
+import { ReactComponent } from "@/components/react";
+import { LayoutSidebar } from "@/components/react/LayoutSidebar";
 import Layout from "@/Layout.astro";
-import { COMPLIST } from "@/store";
+import { COMPLIST } from "@/lib/store";
 ---
 
 <Layout>
-  {
-    COMPLIST.map(([compName, variants]) => (
-      <Section.Root compName={compName} client:only="react">
-        {variants.map((variant) => (
-          <Section.Variant name={variant}>
-            <Section.VariantItem name="Solid">
-              <SolidComponent component={compName} type={variant} client:only="solid-js" />
-            </Section.VariantItem>
-            <Section.VariantItem name="React">
-              <ReactComponent component={compName} type={variant} client:only="react" />
-            </Section.VariantItem>
-          </Section.Variant>
-        ))}
-      </Section.Root>
-    ))
-  }
+  <LayoutSidebar client:only="react">
+    {
+      COMPLIST.map(([component, variants]) => (
+        <Section.Root client:only="react" component={component}>
+          {variants.map((variant) => (
+            <Section.Variant variant={variant} client:only="react">
+              <Section.VariantSolid client:only="react">
+                <SolidComponent component={component} variant={variant} client:only="solid-js" />
+              </Section.VariantSolid>
+              <Section.VariantReact client:only="react">
+                <ReactComponent component={component} variant={variant} client:only="react" />
+              </Section.VariantReact>
+            </Section.Variant>
+          ))}
+        </Section.Root>
+      ))
+    }
+  </LayoutSidebar>
 </Layout>

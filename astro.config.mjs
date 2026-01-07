@@ -12,13 +12,15 @@ export default defineConfig({
     react({ include: ["**/react/**/*.{ts,tsx}", "**/ui/**/*.{ts,tsx}"] }),
     solid({ include: ["**/solid/**/*.{ts,tsx}"] }),
   ],
-
   vite: {
     plugins: [tailwindcss()],
     resolve: {
       alias: {
         "@": path.resolve(fileURLToPath(import.meta.url), "../src"),
       },
+    },
+    server: {
+      port: 4000,
     },
   },
 });

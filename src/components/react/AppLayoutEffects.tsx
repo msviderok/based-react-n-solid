@@ -1,4 +1,4 @@
-import { styling } from "@/store";
+import { styling } from "@/lib/store";
 import { useStore } from "@nanostores/react";
 import { useEffect } from "react";
 
