@@ -11,6 +11,7 @@ export function StyleSwitch() {
     <ToggleGroup
       variant="outline"
       aria-label="Style view"
+      className="w-full"
       value={isCssModules ? ["CssModules"] : ["Tailwind"]}
       onValueChange={(value) => {
         if (value.length > 0) {

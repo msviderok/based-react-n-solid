@@ -20,21 +20,14 @@ import {
 } from "@/components/ui/sidebar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { COMPLIST } from "@/lib/store";
+import { capitalize, cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 
 const CONTENTS = COMPLIST.map(([compName, variants]) => {
-  const name = compName.replaceAll("-", " ");
-
   return {
     id: compName,
-    name: name.charAt(0).toUpperCase() + name.slice(1),
-    variants: variants.map((variant) => {
-      const name = variant.replaceAll("-", " ");
-      return {
-        id: variant,
-        name: name.charAt(0).toUpperCase() + name.slice(1),
-      };
-    }),
+    name: capitalize(compName),
+    variants: variants.map((variant) => ({ id: variant, name: capitalize(variant) })),
   };
 });
 
@@ -71,96 +64,111 @@ export function LayoutSidebar({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <SidebarProvider className="justify-center">
-      <Sidebar className="border-x justify-center">
-        <SidebarHeader className="flex flex-col gap-4 pt-4">
-          <div>
-            <h1 className="text-lg font-bold text-foreground">Base UI for Solid</h1>
-            <h2 className="text-xs text-muted-foreground">Cross-Framework Showcase</h2>
-          </div>
-          <StyleSwitch />
-        </SidebarHeader>
-        <SidebarContent>
-          <SidebarGroup>
-            <SidebarGroupLabel>Components</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {CONTENTS.map((component) => (
-                  <SidebarMenuItem key={component.id}>
-                    <SidebarMenuButton
-                      isActive={activeId === component.id}
-                      onClick={() => {
-                        const element = document.getElementById(component.id);
-                        if (element) {
-                          const offset = 100;
-                          const elementPosition = element.getBoundingClientRect().top;
-                          const offsetPosition = elementPosition + window.pageYOffset - offset;
-
-                          window.scrollTo({
-                            top: offsetPosition,
-                            behavior: "instant",
-                          });
-                        }
-                      }}
-                      className="justify-between"
-                    >
-                      <span className="truncate font-semibold">{component.name}</span>
-
-                      <Tooltip>
-                        <TooltipTrigger
-                          render={
-                            <Badge variant="outline" className="opacity-60 size-5 text-xs scale-80">
-                              {component.variants.length}
-                            </Badge>
-                          }
-                        />
-                        <TooltipContent side="right" sideOffset={24}>
-                          Includes {component.variants.length} variant
-                          {component.variants.length !== 1 ? "s" : ""}
-                        </TooltipContent>
-                      </Tooltip>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        </SidebarContent>
-
-        <SidebarFooter>
-          <div className="flex flex-col text-sm gap-2">
-            <p className="text-muted-foreground flex items-center">
-              <Button variant="link" className="px-1 py-0 text-primary/70" size="sm">
-                <a
-                  href="https://github.com/msviderok/base-ui"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-center gap-1.5"
-                >
-                  <GithubIcon />
-                  Base UI for Solid
-                </a>
-              </Button>
-            </p>
-
-            <p className="text-muted-foreground ">
-              <span className="text-xs">Amateur-grade Base UI port for Solid JS created by</span>
-              <Button variant="link" className="px-1 py-0 text-primary/70" size="sm">
-                <a href="https://github.com/msviderok" target="_blank" rel="noreferrer">
-                  @msviderok
-                </a>
-              </Button>
-            </p>
-          </div>
-        </SidebarFooter>
-      </Sidebar>
-
-      <SidebarInset className="bg-sidebar p-2 max-w-[900px]">
-        <SidebarTrigger className="absolute top-4 left-4" />
-        <main className="bg-background flex w-full flex-col rounded-xl p-8">{children}</main>
-      </SidebarInset>
-      <SidebarRail />
+    <SidebarProvider className="flex-0">
+      <Content activeId={activeId} setActiveId={setActiveId} />
+      <main className="bg-background flex w-full flex-col rounded-xl p-8 max-w-[900px]">
+        {children}
+      </main>
     </SidebarProvider>
+  );
+}
+
+function Content({
+  activeId,
+  setActiveId,
+}: {
+  activeId: string;
+  setActiveId: (id: string) => void;
+}) {
+  const { isMobile } = useSidebar();
+
+  return (
+    <Sidebar
+      collapsible={isMobile ? "offExamples" : "none"}
+      className={cn("border-x justify-center h-svh", !isMobile && "sticky top-0")}
+    >
+      <SidebarHeader className="flex flex-col gap-4 border-b border-border p-4">
+        <div>
+          <h1 className="text-lg font-bold text-foreground">Base UI for Solid</h1>
+          <h2 className="text-xs text-muted-foreground">Cross-Framework Showcase</h2>
+        </div>
+        <StyleSwitch />
+      </SidebarHeader>
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupLabel>Components</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {CONTENTS.map((component) => (
+                <SidebarMenuItem key={component.id}>
+                  <SidebarMenuButton
+                    isActive={activeId === component.id}
+                    onClick={() => {
+                      const element = document.getElementById(component.id);
+                      if (element) {
+                        const offset = 100;
+                        const elementPosition = element.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+                        window.scrollTo({
+                          top: offsetPosition,
+                          behavior: "instant",
+                        });
+                      }
+                    }}
+                    className="justify-between"
+                  >
+                    <span className="truncate font-semibold">{component.name}</span>
+
+                    <Tooltip>
+                      <TooltipTrigger
+                        render={
+                          <Badge variant="outline" className="opacity-60 size-5 text-xs scale-80">
+                            {component.variants.length}
+                          </Badge>
+                        }
+                      />
+                      <TooltipContent side="right" sideOffset={24}>
+                        Includes {component.variants.length} variant
+                        {component.variants.length !== 1 ? "s" : ""}
+                      </TooltipContent>
+                    </Tooltip>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+
+      <SidebarFooter className="border-t border-border pt-4">
+        <div className="flex flex-col text-sm gap-2">
+          <p className="text-muted-foreground flex items-center">
+            <Button variant="link" className="px-1 py-0 text-primary/70" size="sm">
+              <a
+                href="https://github.com/msviderok/base-ui"
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-1.5"
+              >
+                <GithubIcon />
+                Base UI for Solid
+              </a>
+            </Button>
+          </p>
+
+          <p className="text-muted-foreground ">
+            <span className="text-xs">Amateur-grade Base UI port for Solid JS created by</span>
+            <Button variant="link" className="px-1 py-0 text-primary/70" size="sm">
+              <a href="https://github.com/msviderok" target="_blank" rel="noreferrer">
+                @msviderok
+              </a>
+            </Button>
+          </p>
+        </div>
+      </SidebarFooter>
+      <SidebarRail />
+    </Sidebar>
   );
 }
 

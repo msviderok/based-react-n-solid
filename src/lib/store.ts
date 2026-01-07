@@ -7,7 +7,7 @@ interface Section {
   variants: string[];
 }
 
-export const COMPLIST: [string, string[]][] = [
+export const COMPLIST: [string, string[], { minWidth?: number }?][] = [
   ["accordion", ["hero"]],
   ["alert-dialog", ["hero"]],
   ["avatar", ["hero"]],
@@ -38,7 +38,7 @@ export const COMPLIST: [string, string[]][] = [
   ["toast", ["hero", "custom", "position", "promise", "undo"]],
   ["toggle", ["hero"]],
   ["toggle-group", ["hero"]],
-  ["toolbar", ["hero"]],
+  ["toolbar", ["hero"], { minWidth: 600 }],
   ["tooltip", ["hero"]],
 ];
 
