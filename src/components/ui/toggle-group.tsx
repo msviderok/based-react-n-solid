@@ -1,12 +1,32 @@
 "use client";
 
-import { Toggle as TogglePrimitive } from "@base-ui/react/toggle";
-import { ToggleGroup as ToggleGroupPrimitive } from "@base-ui/react/toggle-group";
-import { type VariantProps } from "class-variance-authority";
+import { Toggle as TogglePrimitive } from "@msviderok/base-ui-react/toggle";
+import { ToggleGroup as ToggleGroupPrimitive } from "@msviderok/base-ui-react/toggle-group";
+import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 
-import { toggleVariants } from "@/components/ui/toggle";
 import { cn } from "@/lib/utils";
+
+const toggleVariants = cva(
+  "hover:text-foreground aria-pressed:bg-muted focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive data-[state=on]:bg-muted gap-1 rounded-md text-xs font-medium transition-all [&_svg:not([class*='size-'])]:size-3.5 group/toggle hover:bg-muted inline-flex items-center justify-center whitespace-nowrap outline-none focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 font-semibold tracking-[0.18em] uppercase cursor-pointer",
+  {
+    variants: {
+      variant: {
+        default: "bg-transparent",
+        outline: "border-input hover:bg-muted border bg-transparent",
+      },
+      size: {
+        default: "h-8 min-w-7 px-4 text-[10px]",
+        sm: "h-6 min-w-6 rounded-[min(var(--radius-md),8px)] px-4 text-[0.625rem] [&_svg:not([class*='size-'])]:size-3",
+        lg: "h-8 min-w-8 px-4",
+      },
+    },
+    defaultVariants: {
+      variant: "outline",
+      size: "default",
+    },
+  }
+);
 
 const ToggleGroupContext = React.createContext<
   VariantProps<typeof toggleVariants> & {

@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -13,10 +12,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useIsMobile } from "@/lib/hooks";
 import { cn } from "@/lib/utils";
-import { mergeProps } from "@base-ui/react/merge-props";
-import { useRender } from "@base-ui/react/use-render";
+import { mergeProps } from "@msviderok/base-ui-react/merge-props";
+import { useRender } from "@msviderok/base-ui-react/use-render";
 import { cva, type VariantProps } from "class-variance-authority";
-import { PanelLeftIcon } from "lucide-react";
 import * as React from "react";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
@@ -318,17 +316,6 @@ function SidebarInset({ className, ...props }: React.ComponentProps<"main">) {
   );
 }
 
-function SidebarInput({ className, ...props }: React.ComponentProps<typeof Input>) {
-  return (
-    <Input
-      data-slot="sidebar-input"
-      data-sidebar="input"
-      className={cn("bg-muted/20 dark:bg-muted/30 border-input h-8 w-full", className)}
-      {...props}
-    />
-  );
-}
-
 function SidebarHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
@@ -393,7 +380,6 @@ function SidebarGroupLabel({
   ...props
 }: useRender.ComponentProps<"div"> & React.ComponentProps<"div">) {
   return useRender({
-    defaultTagName: "div",
     props: mergeProps<"div">(
       {
         className: cn(
@@ -403,7 +389,7 @@ function SidebarGroupLabel({
       },
       props
     ),
-    render,
+    render: render ?? <div />,
     state: {
       slot: "sidebar-group-label",
       sidebar: "group-label",
@@ -417,7 +403,6 @@ function SidebarGroupAction({
   ...props
 }: useRender.ComponentProps<"button"> & React.ComponentProps<"button">) {
   return useRender({
-    defaultTagName: "button",
     props: mergeProps<"button">(
       {
         className: cn(
@@ -427,7 +412,7 @@ function SidebarGroupAction({
       },
       props
     ),
-    render,
+    render: render ?? <button />,
     state: {
       slot: "sidebar-group-action",
       sidebar: "group-action",
@@ -505,14 +490,15 @@ function SidebarMenuButton({
   } & VariantProps<typeof sidebarMenuButtonVariants>) {
   const { isMobile, state } = useSidebar();
   const comp = useRender({
-    defaultTagName: "button",
     props: mergeProps<"button">(
       {
         className: cn(sidebarMenuButtonVariants({ variant, size }), className),
       },
       props
     ),
-    render: !tooltip ? render : TooltipTrigger,
+    render: !tooltip
+      ? render ?? ((props, state) => <button {...props} data-active={state.active} />)
+      : TooltipTrigger,
     state: {
       slot: "sidebar-menu-button",
       sidebar: "menu-button",
@@ -554,7 +540,6 @@ function SidebarMenuAction({
     showOnHover?: boolean;
   }) {
   return useRender({
-    defaultTagName: "button",
     props: mergeProps<"button">(
       {
         className: cn(
@@ -566,7 +551,7 @@ function SidebarMenuAction({
       },
       props
     ),
-    render,
+    render: render ?? <button />,
     state: {
       slot: "sidebar-menu-action",
       sidebar: "menu-action",
@@ -658,7 +643,6 @@ function SidebarMenuSubButton({
     isActive?: boolean;
   }) {
   return useRender({
-    defaultTagName: "a",
     props: mergeProps<"a">(
       {
         className: cn(
@@ -668,7 +652,7 @@ function SidebarMenuSubButton({
       },
       props
     ),
-    render,
+    render: render ?? <a />,
     state: {
       slot: "sidebar-menu-sub-button",
       sidebar: "menu-sub-button",
@@ -708,7 +692,6 @@ export {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
-  SidebarInput,
   SidebarInset,
   SidebarMenu,
   SidebarMenuAction,

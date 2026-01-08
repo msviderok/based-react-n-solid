@@ -1,0 +1,739 @@
+diff --git a/cjs/button/Button.d.ts b/cjs/button/Button.d.ts
+new file mode 100644
+index 0000000000000000000000000000000000000000..a473753a4d8df34336245907b23d01b2dd2f9285
+--- /dev/null
++++ b/cjs/button/Button.d.ts
+@@ -0,0 +1,39 @@
++import * as React from 'react';
++import type { BaseUIComponentProps, NativeButtonProps, NonNativeButtonProps } from "../utils/types.js";
++/**
++ * A button component that can be used to trigger actions.
++ * Renders a `<button>` element.
++ *
++ * Documentation: [Base UI Button](https://base-ui.com/react/components/button)
++ */
++export declare const Button: React.ForwardRefExoticComponent<ButtonProps & React.RefAttributes<HTMLElement>>;
++export interface ButtonState {
++  /**
++   * Whether the button should ignore user interaction.
++   */
++  disabled: boolean;
++}
++interface ButtonCommonProps {
++  /**
++   * Whether the button should ignore user interaction.
++   */
++  disabled?: boolean;
++  /**
++   * Whether the button should be focusable when disabled.
++   * @default false
++   */
++  focusableWhenDisabled?: boolean;
++}
++type NonNativeAttributeKeys = 'form' | 'formAction' | 'formEncType' | 'formMethod' | 'formNoValidate' | 'formTarget' | 'name' | 'type' | 'value';
++interface ButtonNativeProps extends NativeButtonProps, ButtonCommonProps, Omit<BaseUIComponentProps<'button', ButtonState>, 'disabled'> {
++  nativeButton?: true;
++}
++interface ButtonNonNativeProps extends NonNativeButtonProps, ButtonCommonProps, Omit<BaseUIComponentProps<'button', ButtonState>, NonNativeAttributeKeys | 'disabled'> {
++  nativeButton: false;
++}
++export type ButtonProps = ButtonNativeProps | ButtonNonNativeProps;
++export declare namespace Button {
++  type State = ButtonState;
++  type Props = ButtonProps;
++}
++export {};
+\ No newline at end of file
+diff --git a/cjs/button/Button.js b/cjs/button/Button.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..dfd8f2b650f087780a0067bef84e8d98d52f525f
+--- /dev/null
++++ b/cjs/button/Button.js
+@@ -0,0 +1,45 @@
++"use strict";
++'use client';
++
++var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard").default;
++Object.defineProperty(exports, "__esModule", {
++  value: true
++});
++exports.Button = void 0;
++var React = _interopRequireWildcard(require("react"));
++var _useButton = require("../use-button/useButton");
++var _useRenderElement = require("../utils/useRenderElement");
++/**
++ * A button component that can be used to trigger actions.
++ * Renders a `<button>` element.
++ *
++ * Documentation: [Base UI Button](https://base-ui.com/react/components/button)
++ */
++const Button = exports.Button = /*#__PURE__*/React.forwardRef(function Button(componentProps, forwardedRef) {
++  const {
++    render,
++    className,
++    disabled: disabledProp = false,
++    focusableWhenDisabled = false,
++    nativeButton = true,
++    ...elementProps
++  } = componentProps;
++  const disabled = Boolean(disabledProp);
++  const {
++    getButtonProps,
++    buttonRef
++  } = (0, _useButton.useButton)({
++    disabled,
++    focusableWhenDisabled,
++    native: nativeButton
++  });
++  const state = React.useMemo(() => ({
++    disabled
++  }), [disabled]);
++  return (0, _useRenderElement.useRenderElement)('button', componentProps, {
++    state,
++    ref: [forwardedRef, buttonRef],
++    props: [elementProps, getButtonProps]
++  });
++});
++if (process.env.NODE_ENV !== "production") Button.displayName = "Button";
+\ No newline at end of file
+diff --git a/cjs/button/ButtonDataAttributes.d.ts b/cjs/button/ButtonDataAttributes.d.ts
+new file mode 100644
+index 0000000000000000000000000000000000000000..f8f51be98934002904bcb51b727aa58a48681e9d
+--- /dev/null
++++ b/cjs/button/ButtonDataAttributes.d.ts
+@@ -0,0 +1,6 @@
++export declare enum ButtonDataAttributes {
++  /**
++   * Present when the button is disabled.
++   */
++  disabled = "data-disabled",
++}
+\ No newline at end of file
+diff --git a/cjs/button/ButtonDataAttributes.js b/cjs/button/ButtonDataAttributes.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..286b6740075601441a7e56bbeaeb813d560f1ece
+--- /dev/null
++++ b/cjs/button/ButtonDataAttributes.js
+@@ -0,0 +1,13 @@
++"use strict";
++
++Object.defineProperty(exports, "__esModule", {
++  value: true
++});
++exports.ButtonDataAttributes = void 0;
++let ButtonDataAttributes = exports.ButtonDataAttributes = /*#__PURE__*/function (ButtonDataAttributes) {
++  /**
++   * Present when the button is disabled.
++   */
++  ButtonDataAttributes["disabled"] = "data-disabled";
++  return ButtonDataAttributes;
++}({});
+\ No newline at end of file
+diff --git a/cjs/button/index.d.ts b/cjs/button/index.d.ts
+new file mode 100644
+index 0000000000000000000000000000000000000000..4456e3f9ae00a0322c0f559125b03e1ce41a30b7
+--- /dev/null
++++ b/cjs/button/index.d.ts
+@@ -0,0 +1,2 @@
++export { Button } from "./Button.js";
++export type * from "./Button.js";
+\ No newline at end of file
+diff --git a/cjs/button/index.js b/cjs/button/index.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..0bc33c541c1289d2ba95a5428db4547a41e31896
+--- /dev/null
++++ b/cjs/button/index.js
+@@ -0,0 +1,12 @@
++"use strict";
++
++Object.defineProperty(exports, "__esModule", {
++  value: true
++});
++Object.defineProperty(exports, "Button", {
++  enumerable: true,
++  get: function () {
++    return _Button.Button;
++  }
++});
++var _Button = require("./Button");
+\ No newline at end of file
+diff --git a/cjs/index.js b/cjs/index.js
+index 1ef12bfe0f9d3fb3fc8913b3d57be01ec33432ee..e8d2a61b3a73481f670cfeae8fbc030659e40d0c 100644
+--- a/cjs/index.js
++++ b/cjs/index.js
+@@ -2,10 +2,10 @@
+ 
+ var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard").default;
+ Object.defineProperty(exports, "__esModule", {
+-  value: true
++  value: true,
+ });
+ var _exportNames = {
+-  utils: true
++  utils: true,
+ };
+ exports.utils = void 0;
+ var _accordion = require("./accordion");
+@@ -17,7 +17,7 @@ Object.keys(_accordion).forEach(function (key) {
+     enumerable: true,
+     get: function () {
+       return _accordion[key];
+-    }
++    },
+   });
+ });
+ var _alertDialog = require("./alert-dialog");
+@@ -29,7 +29,7 @@ Object.keys(_alertDialog).forEach(function (key) {
+     enumerable: true,
+     get: function () {
+       return _alertDialog[key];
+-    }
++    },
+   });
+ });
+ var _avatar = require("./avatar");
+@@ -41,7 +41,19 @@ Object.keys(_avatar).forEach(function (key) {
+     enumerable: true,
+     get: function () {
+       return _avatar[key];
+-    }
++    },
++  });
++});
++var _button = require("./button");
++Object.keys(_button).forEach(function (key) {
++  if (key === "default" || key === "__esModule") return;
++  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
++  if (key in exports && exports[key] === _button[key]) return;
++  Object.defineProperty(exports, key, {
++    enumerable: true,
++    get: function () {
++      return _button[key];
++    },
+   });
+ });
+ var _checkbox = require("./checkbox");
+@@ -53,7 +65,7 @@ Object.keys(_checkbox).forEach(function (key) {
+     enumerable: true,
+     get: function () {
+       return _checkbox[key];
+-    }
++    },
+   });
+ });
+ var _checkboxGroup = require("./checkbox-group");
+@@ -65,7 +77,7 @@ Object.keys(_checkboxGroup).forEach(function (key) {
+     enumerable: true,
+     get: function () {
+       return _checkboxGroup[key];
+-    }
++    },
+   });
+ });
+ var _collapsible = require("./collapsible");
+@@ -77,7 +89,7 @@ Object.keys(_collapsible).forEach(function (key) {
+     enumerable: true,
+     get: function () {
+       return _collapsible[key];
+-    }
++    },
+   });
+ });
+ var _contextMenu = require("./context-menu");
+@@ -89,7 +101,7 @@ Object.keys(_contextMenu).forEach(function (key) {
+     enumerable: true,
+     get: function () {
+       return _contextMenu[key];
+-    }
++    },
+   });
+ });
+ var _dialog = require("./dialog");
+@@ -101,7 +113,7 @@ Object.keys(_dialog).forEach(function (key) {
+     enumerable: true,
+     get: function () {
+       return _dialog[key];
+-    }
++    },
+   });
+ });
+ var _directionProvider = require("./direction-provider");
+@@ -113,7 +125,7 @@ Object.keys(_directionProvider).forEach(function (key) {
+     enumerable: true,
+     get: function () {
+       return _directionProvider[key];
+-    }
++    },
+   });
+ });
+ var _field = require("./field");
+@@ -125,7 +137,7 @@ Object.keys(_field).forEach(function (key) {
+     enumerable: true,
+     get: function () {
+       return _field[key];
+-    }
++    },
+   });
+ });
+ var _fieldset = require("./fieldset");
+@@ -137,7 +149,7 @@ Object.keys(_fieldset).forEach(function (key) {
+     enumerable: true,
+     get: function () {
+       return _fieldset[key];
+-    }
++    },
+   });
+ });
+ var _form = require("./form");
+@@ -149,7 +161,7 @@ Object.keys(_form).forEach(function (key) {
+     enumerable: true,
+     get: function () {
+       return _form[key];
+-    }
++    },
+   });
+ });
+ var _input = require("./input");
+@@ -161,7 +173,7 @@ Object.keys(_input).forEach(function (key) {
+     enumerable: true,
+     get: function () {
+       return _input[key];
+-    }
++    },
+   });
+ });
+ var _menu = require("./menu");
+@@ -173,7 +185,7 @@ Object.keys(_menu).forEach(function (key) {
+     enumerable: true,
+     get: function () {
+       return _menu[key];
+-    }
++    },
+   });
+ });
+ var _menubar = require("./menubar");
+@@ -185,7 +197,7 @@ Object.keys(_menubar).forEach(function (key) {
+     enumerable: true,
+     get: function () {
+       return _menubar[key];
+-    }
++    },
+   });
+ });
+ var _mergeProps = require("./merge-props");
+@@ -197,7 +209,7 @@ Object.keys(_mergeProps).forEach(function (key) {
+     enumerable: true,
+     get: function () {
+       return _mergeProps[key];
+-    }
++    },
+   });
+ });
+ var _meter = require("./meter");
+@@ -209,7 +221,7 @@ Object.keys(_meter).forEach(function (key) {
+     enumerable: true,
+     get: function () {
+       return _meter[key];
+-    }
++    },
+   });
+ });
+ var _navigationMenu = require("./navigation-menu");
+@@ -221,7 +233,7 @@ Object.keys(_navigationMenu).forEach(function (key) {
+     enumerable: true,
+     get: function () {
+       return _navigationMenu[key];
+-    }
++    },
+   });
+ });
+ var _numberField = require("./number-field");
+@@ -233,7 +245,7 @@ Object.keys(_numberField).forEach(function (key) {
+     enumerable: true,
+     get: function () {
+       return _numberField[key];
+-    }
++    },
+   });
+ });
+ var _popover = require("./popover");
+@@ -245,7 +257,7 @@ Object.keys(_popover).forEach(function (key) {
+     enumerable: true,
+     get: function () {
+       return _popover[key];
+-    }
++    },
+   });
+ });
+ var _previewCard = require("./preview-card");
+@@ -257,7 +269,7 @@ Object.keys(_previewCard).forEach(function (key) {
+     enumerable: true,
+     get: function () {
+       return _previewCard[key];
+-    }
++    },
+   });
+ });
+ var _progress = require("./progress");
+@@ -269,7 +281,7 @@ Object.keys(_progress).forEach(function (key) {
+     enumerable: true,
+     get: function () {
+       return _progress[key];
+-    }
++    },
+   });
+ });
+ var _radio = require("./radio");
+@@ -281,7 +293,7 @@ Object.keys(_radio).forEach(function (key) {
+     enumerable: true,
+     get: function () {
+       return _radio[key];
+-    }
++    },
+   });
+ });
+ var _radioGroup = require("./radio-group");
+@@ -293,7 +305,7 @@ Object.keys(_radioGroup).forEach(function (key) {
+     enumerable: true,
+     get: function () {
+       return _radioGroup[key];
+-    }
++    },
+   });
+ });
+ var _scrollArea = require("./scroll-area");
+@@ -305,7 +317,7 @@ Object.keys(_scrollArea).forEach(function (key) {
+     enumerable: true,
+     get: function () {
+       return _scrollArea[key];
+-    }
++    },
+   });
+ });
+ var _select = require("./select");
+@@ -317,7 +329,7 @@ Object.keys(_select).forEach(function (key) {
+     enumerable: true,
+     get: function () {
+       return _select[key];
+-    }
++    },
+   });
+ });
+ var _separator = require("./separator");
+@@ -329,7 +341,7 @@ Object.keys(_separator).forEach(function (key) {
+     enumerable: true,
+     get: function () {
+       return _separator[key];
+-    }
++    },
+   });
+ });
+ var _slider = require("./slider");
+@@ -341,7 +353,7 @@ Object.keys(_slider).forEach(function (key) {
+     enumerable: true,
+     get: function () {
+       return _slider[key];
+-    }
++    },
+   });
+ });
+ var _switch = require("./switch");
+@@ -353,7 +365,7 @@ Object.keys(_switch).forEach(function (key) {
+     enumerable: true,
+     get: function () {
+       return _switch[key];
+-    }
++    },
+   });
+ });
+ var _tabs = require("./tabs");
+@@ -365,7 +377,7 @@ Object.keys(_tabs).forEach(function (key) {
+     enumerable: true,
+     get: function () {
+       return _tabs[key];
+-    }
++    },
+   });
+ });
+ var _toast = require("./toast");
+@@ -377,7 +389,7 @@ Object.keys(_toast).forEach(function (key) {
+     enumerable: true,
+     get: function () {
+       return _toast[key];
+-    }
++    },
+   });
+ });
+ var _toggle = require("./toggle");
+@@ -389,7 +401,7 @@ Object.keys(_toggle).forEach(function (key) {
+     enumerable: true,
+     get: function () {
+       return _toggle[key];
+-    }
++    },
+   });
+ });
+ var _toggleGroup = require("./toggle-group");
+@@ -401,7 +413,7 @@ Object.keys(_toggleGroup).forEach(function (key) {
+     enumerable: true,
+     get: function () {
+       return _toggleGroup[key];
+-    }
++    },
+   });
+ });
+ var _toolbar = require("./toolbar");
+@@ -413,7 +425,7 @@ Object.keys(_toolbar).forEach(function (key) {
+     enumerable: true,
+     get: function () {
+       return _toolbar[key];
+-    }
++    },
+   });
+ });
+ var _tooltip = require("./tooltip");
+@@ -425,7 +437,7 @@ Object.keys(_tooltip).forEach(function (key) {
+     enumerable: true,
+     get: function () {
+       return _tooltip[key];
+-    }
++    },
+   });
+ });
+ var _useRender = require("./use-render");
+@@ -437,7 +449,7 @@ Object.keys(_useRender).forEach(function (key) {
+     enumerable: true,
+     get: function () {
+       return _useRender[key];
+-    }
++    },
+   });
+ });
+ var _utils = _interopRequireWildcard(require("./utils"));
+diff --git a/esm/button/Button.d.ts b/esm/button/Button.d.ts
+new file mode 100644
+index 0000000000000000000000000000000000000000..a473753a4d8df34336245907b23d01b2dd2f9285
+--- /dev/null
++++ b/esm/button/Button.d.ts
+@@ -0,0 +1,39 @@
++import * as React from 'react';
++import type { BaseUIComponentProps, NativeButtonProps, NonNativeButtonProps } from "../utils/types.js";
++/**
++ * A button component that can be used to trigger actions.
++ * Renders a `<button>` element.
++ *
++ * Documentation: [Base UI Button](https://base-ui.com/react/components/button)
++ */
++export declare const Button: React.ForwardRefExoticComponent<ButtonProps & React.RefAttributes<HTMLElement>>;
++export interface ButtonState {
++  /**
++   * Whether the button should ignore user interaction.
++   */
++  disabled: boolean;
++}
++interface ButtonCommonProps {
++  /**
++   * Whether the button should ignore user interaction.
++   */
++  disabled?: boolean;
++  /**
++   * Whether the button should be focusable when disabled.
++   * @default false
++   */
++  focusableWhenDisabled?: boolean;
++}
++type NonNativeAttributeKeys = 'form' | 'formAction' | 'formEncType' | 'formMethod' | 'formNoValidate' | 'formTarget' | 'name' | 'type' | 'value';
++interface ButtonNativeProps extends NativeButtonProps, ButtonCommonProps, Omit<BaseUIComponentProps<'button', ButtonState>, 'disabled'> {
++  nativeButton?: true;
++}
++interface ButtonNonNativeProps extends NonNativeButtonProps, ButtonCommonProps, Omit<BaseUIComponentProps<'button', ButtonState>, NonNativeAttributeKeys | 'disabled'> {
++  nativeButton: false;
++}
++export type ButtonProps = ButtonNativeProps | ButtonNonNativeProps;
++export declare namespace Button {
++  type State = ButtonState;
++  type Props = ButtonProps;
++}
++export {};
+\ No newline at end of file
+diff --git a/esm/button/Button.js b/esm/button/Button.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..f3128a58bdc0b3f3ea59b58ee6603d645a8f2613
+--- /dev/null
++++ b/esm/button/Button.js
+@@ -0,0 +1,39 @@
++'use client';
++
++import * as React from 'react';
++import { useButton } from "../use-button/useButton.js";
++import { useRenderElement } from "../utils/useRenderElement.js";
++/**
++ * A button component that can be used to trigger actions.
++ * Renders a `<button>` element.
++ *
++ * Documentation: [Base UI Button](https://base-ui.com/react/components/button)
++ */
++export const Button = /*#__PURE__*/React.forwardRef(function Button(componentProps, forwardedRef) {
++  const {
++    render,
++    className,
++    disabled: disabledProp = false,
++    focusableWhenDisabled = false,
++    nativeButton = true,
++    ...elementProps
++  } = componentProps;
++  const disabled = Boolean(disabledProp);
++  const {
++    getButtonProps,
++    buttonRef
++  } = useButton({
++    disabled,
++    focusableWhenDisabled,
++    native: nativeButton
++  });
++  const state = React.useMemo(() => ({
++    disabled
++  }), [disabled]);
++  return useRenderElement('button', componentProps, {
++    state,
++    ref: [forwardedRef, buttonRef],
++    props: [elementProps, getButtonProps]
++  });
++});
++if (process.env.NODE_ENV !== "production") Button.displayName = "Button";
+\ No newline at end of file
+diff --git a/esm/button/ButtonDataAttributes.d.ts b/esm/button/ButtonDataAttributes.d.ts
+new file mode 100644
+index 0000000000000000000000000000000000000000..f8f51be98934002904bcb51b727aa58a48681e9d
+--- /dev/null
++++ b/esm/button/ButtonDataAttributes.d.ts
+@@ -0,0 +1,6 @@
++export declare enum ButtonDataAttributes {
++  /**
++   * Present when the button is disabled.
++   */
++  disabled = "data-disabled",
++}
+\ No newline at end of file
+diff --git a/esm/button/ButtonDataAttributes.js b/esm/button/ButtonDataAttributes.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..8d13652f28c6496561bcaa1d6c1a4be6a1dd5c62
+--- /dev/null
++++ b/esm/button/ButtonDataAttributes.js
+@@ -0,0 +1,7 @@
++export let ButtonDataAttributes = /*#__PURE__*/function (ButtonDataAttributes) {
++  /**
++   * Present when the button is disabled.
++   */
++  ButtonDataAttributes["disabled"] = "data-disabled";
++  return ButtonDataAttributes;
++}({});
+\ No newline at end of file
+diff --git a/esm/button/index.d.ts b/esm/button/index.d.ts
+new file mode 100644
+index 0000000000000000000000000000000000000000..4456e3f9ae00a0322c0f559125b03e1ce41a30b7
+--- /dev/null
++++ b/esm/button/index.d.ts
+@@ -0,0 +1,2 @@
++export { Button } from "./Button.js";
++export type * from "./Button.js";
+\ No newline at end of file
+diff --git a/esm/button/index.js b/esm/button/index.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..ccdcff6620370c1f480503fd271b2877e223ac9c
+--- /dev/null
++++ b/esm/button/index.js
+@@ -0,0 +1 @@
++export { Button } from "./Button.js";
+\ No newline at end of file
+diff --git a/esm/index.d.ts b/esm/index.d.ts
+index fbb412e1a18ee517109620a6b781b357e87f4b52..4afff6498a63c62b3503929ce765c1a04efd78c2 100644
+--- a/esm/index.d.ts
++++ b/esm/index.d.ts
+@@ -1,8 +1,9 @@
+ export * from "./accordion/index.js";
+ export * from "./alert-dialog/index.js";
+ export * from "./avatar/index.js";
+-export * from "./checkbox/index.js";
++export * from "./button/index.js";
+ export * from "./checkbox-group/index.js";
++export * from "./checkbox/index.js";
+ export * from "./collapsible/index.js";
+ export * from "./context-menu/index.js";
+ export * from "./dialog/index.js";
+@@ -20,8 +21,8 @@ export * from "./number-field/index.js";
+ export * from "./popover/index.js";
+ export * from "./preview-card/index.js";
+ export * from "./progress/index.js";
+-export * from "./radio/index.js";
+ export * from "./radio-group/index.js";
++export * from "./radio/index.js";
+ export * from "./scroll-area/index.js";
+ export * from "./select/index.js";
+ export * from "./separator/index.js";
+@@ -29,8 +30,8 @@ export * from "./slider/index.js";
+ export * from "./switch/index.js";
+ export * from "./tabs/index.js";
+ export * from "./toast/index.js";
+-export * from "./toggle/index.js";
+ export * from "./toggle-group/index.js";
++export * from "./toggle/index.js";
+ export * from "./toolbar/index.js";
+ export * from "./tooltip/index.js";
+ export * from "./use-render/index.js";
+diff --git a/esm/index.js b/esm/index.js
+index 0d1babb161b123dec8bbb00d1f82aecc660b8217..80b18c4b2b30cf1f27ce062146f733df493ca28c 100644
+--- a/esm/index.js
++++ b/esm/index.js
+@@ -8,8 +8,9 @@
+ export * from "./accordion/index.js";
+ export * from "./alert-dialog/index.js";
+ export * from "./avatar/index.js";
+-export * from "./checkbox/index.js";
++export * from "./button/index.js";
+ export * from "./checkbox-group/index.js";
++export * from "./checkbox/index.js";
+ export * from "./collapsible/index.js";
+ export * from "./context-menu/index.js";
+ export * from "./dialog/index.js";
+@@ -27,8 +28,8 @@ export * from "./number-field/index.js";
+ export * from "./popover/index.js";
+ export * from "./preview-card/index.js";
+ export * from "./progress/index.js";
+-export * from "./radio/index.js";
+ export * from "./radio-group/index.js";
++export * from "./radio/index.js";
+ export * from "./scroll-area/index.js";
+ export * from "./select/index.js";
+ export * from "./separator/index.js";
+@@ -36,8 +37,8 @@ export * from "./slider/index.js";
+ export * from "./switch/index.js";
+ export * from "./tabs/index.js";
+ export * from "./toast/index.js";
+-export * from "./toggle/index.js";
+ export * from "./toggle-group/index.js";
++export * from "./toggle/index.js";
+ export * from "./toolbar/index.js";
+ export * from "./tooltip/index.js";
+ export * from "./use-render/index.js";
+diff --git a/package.json b/package.json
+index 7e63f1f0ec865f99dbc24221e5b4055480533772..b4ec06c05c1db85952d58e8b0f37bde7f6d4a09e 100644
+--- a/package.json
++++ b/package.json
+@@ -103,6 +103,16 @@
+         "default": "./esm/avatar/index.js"
+       }
+     },
++    "./button": {
++      "require": {
++        "types": "./cjs/button/index.d.ts",
++        "default": "./csj/button/index.js"
++      },
++      "default": {
++        "types": "./esm/button/index.d.ts",
++        "default": "./esm/button/index.js"
++      }
++    },
+     "./checkbox": {
+       "require": {
+         "types": "./cjs/checkbox/index.d.ts",

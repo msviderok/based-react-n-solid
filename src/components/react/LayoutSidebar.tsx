@@ -9,7 +9,6 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
-  SidebarInset,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -35,30 +34,149 @@ export function LayoutSidebar({ children }: { children: React.ReactNode }) {
   const [activeId, setActiveId] = useState<string>("");
 
   useEffect(() => {
+    if (!activeId) return;
+
+    const item = document.querySelector(`[data-comp-id="${activeId}"]`) as HTMLElement | null;
+    const contentRoot = document.querySelector(
+      '[data-slot="sidebar-content"]'
+    ) as HTMLElement | null;
+    if (!item || !contentRoot) return;
+
+    // `SidebarContent` is a `ScrollArea` root; the *actual* scrolling element is its viewport.
+    const scrollEl =
+      (contentRoot.querySelector('[data-slot="scroll-area-viewport"]') as HTMLElement | null) ??
+      contentRoot;
+
+    // If the container isn't actually scrollable, nothing to do.
+    if (scrollEl.scrollHeight <= scrollEl.clientHeight) return;
+
+    const padding = 12;
+    const containerRect = scrollEl.getBoundingClientRect();
+    const itemRect = item.getBoundingClientRect();
+
+    const above = itemRect.top < containerRect.top + padding;
+    const below = itemRect.bottom > containerRect.bottom - padding;
+    if (!above && !below) return;
+
+    // itemOffsetTop: item's top relative to container scroll origin.
+    const itemOffsetTop = itemRect.top - containerRect.top + scrollEl.scrollTop;
+
+    let targetScrollTop = scrollEl.scrollTop;
+    if (above) {
+      targetScrollTop = itemOffsetTop - padding;
+    } else if (below) {
+      targetScrollTop = itemOffsetTop - scrollEl.clientHeight + item.offsetHeight + padding;
+    }
+
+    // Clamp to valid scroll range (fixes first/last items).
+    const maxScrollTop = scrollEl.scrollHeight - scrollEl.clientHeight;
+    targetScrollTop = Math.max(0, Math.min(targetScrollTop, maxScrollTop));
+
+    scrollEl.scrollTo({ top: targetScrollTop, behavior: "smooth" });
+  }, [activeId]);
+
+  useEffect(() => {
+    if (CONTENTS.length === 0) return;
+
+    const latestById = new Map<string, IntersectionObserverEntry>();
+    let raf = 0;
+
+    const pickActiveFromViewport = () => {
+      raf = 0;
+
+      const scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+      const doc = document.documentElement;
+      const nearTop = scrollY < 4;
+      const nearBottom = window.innerHeight + scrollY >= doc.scrollHeight - 4;
+
+      const firstId = CONTENTS[0]?.id;
+      const lastId = CONTENTS[CONTENTS.length - 1]?.id;
+
+      if (nearTop && firstId) {
+        setActiveId((prev) => (prev === firstId ? prev : firstId));
+        return;
+      }
+      if (nearBottom && lastId) {
+        setActiveId((prev) => (prev === lastId ? prev : lastId));
+        return;
+      }
+
+      // Prefer the most-visible intersecting section; tie-break by being closer to the top.
+      let best: IntersectionObserverEntry | null = null;
+      for (const entry of latestById.values()) {
+        if (!entry.isIntersecting) continue;
+        if (!best) {
+          best = entry;
+          continue;
+        }
+        if (entry.intersectionRatio > best.intersectionRatio) {
+          best = entry;
+          continue;
+        }
+        if (entry.intersectionRatio === best.intersectionRatio) {
+          if (entry.boundingClientRect.top < best.boundingClientRect.top) {
+            best = entry;
+          }
+        }
+      }
+
+      if (best) {
+        const id = (best.target as HTMLElement).id;
+        if (id) setActiveId((prev) => (prev === id ? prev : id));
+        return;
+      }
+
+      // Fallback: pick the last section whose top has passed a reasonable offset.
+      // This fixes the "first few / last few" when rootMargin/thresholds miss intersections.
+      const offset = 120;
+      let fallbackId = firstId ?? "";
+      for (const { id } of CONTENTS) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        if (el.getBoundingClientRect().top - offset <= 0) fallbackId = id;
+        else break;
+      }
+      if (fallbackId) setActiveId((prev) => (prev === fallbackId ? prev : fallbackId));
+    };
+
+    const schedulePick = () => {
+      if (raf) return;
+      raf = window.requestAnimationFrame(pickActiveFromViewport);
+    };
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveId(entry.target.id);
-          }
+          latestById.set((entry.target as HTMLElement).id, entry);
         });
+        schedulePick();
       },
-      { rootMargin: "-20% 0px -70% 0px" }
+      {
+        // Mark a section as "active" once it's meaningfully on screen, not just barely intersecting.
+        rootMargin: "0px 0px -60% 0px",
+        threshold: [0, 0.1, 0.25, 0.5, 0.75, 1],
+      }
     );
 
     const observeElements = () => {
-      CONTENTS.forEach((component) => {
-        const element = document.getElementById(component.id);
-        if (element) {
-          observer.observe(element);
-        }
+      CONTENTS.forEach(({ id }) => {
+        const element = document.getElementById(id);
+        if (element) observer.observe(element);
       });
+      // In case we're already scrolled when this mounts.
+      schedulePick();
     };
 
-    const timeoutId = setTimeout(observeElements, 100);
+    const timeoutId = window.setTimeout(observeElements, 100);
+
+    window.addEventListener("scroll", schedulePick, { passive: true });
+    window.addEventListener("resize", schedulePick);
 
     return () => {
-      clearTimeout(timeoutId);
+      window.clearTimeout(timeoutId);
+      window.removeEventListener("scroll", schedulePick);
+      window.removeEventListener("resize", schedulePick);
+      if (raf) window.cancelAnimationFrame(raf);
       observer.disconnect();
     };
   }, []);
@@ -100,7 +218,7 @@ function Content({
           <SidebarGroupContent>
             <SidebarMenu>
               {CONTENTS.map((component) => (
-                <SidebarMenuItem key={component.id}>
+                <SidebarMenuItem key={component.id} data-comp-id={component.id}>
                   <SidebarMenuButton
                     isActive={activeId === component.id}
                     onClick={() => {
