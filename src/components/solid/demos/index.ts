@@ -1,3 +1,4 @@
+/** @jsxImportSource solid-js */
 import * as AccordionHero from "./accordion/hero";
 import * as AlertDialogHero from "./alert-dialog/hero";
 import * as AvatarHero from "./avatar/hero";

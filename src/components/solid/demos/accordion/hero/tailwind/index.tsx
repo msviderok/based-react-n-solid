@@ -1,4 +1,5 @@
 /** @jsxImportSource solid-js */
+
 import { Accordion } from "@msviderok/base-ui-solid/accordion";
 import type { ComponentProps } from "solid-js";
 
