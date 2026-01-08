@@ -11,7 +11,7 @@
         "@fontsource-variable/inter": "^5.2.8",
         "@lucide/astro": "^0.562.0",
         "@msviderok/base-ui-react": "^1.0.0-beta.3",
-        "@msviderok/base-ui-solid": "^1.0.0-beta.5",
+        "@msviderok/base-ui-solid": "^1.0.0-beta.6",
         "@nanostores/persistent": "^1.2.0",
         "@nanostores/react": "^1.0.0",
         "@nanostores/solid": "^1.1.1",
@@ -268,7 +268,7 @@
 
     "@msviderok/base-ui-react": ["@msviderok/base-ui-react@1.0.0-beta.3", "https://npm.pkg.github.com/download/@msviderok/base-ui-react/1.0.0-beta.3/68743736ff6e6d278a30c27085364bc4e55ff748", { "dependencies": { "@babel/runtime": "^7.27.6", "@floating-ui/react-dom": "^2.1.4", "@floating-ui/utils": "^0.2.10", "reselect": "^5.1.1", "tabbable": "^6.2.0", "use-sync-external-store": "^1.5.0" }, "peerDependencies": { "@types/react": "^17 || ^18 || ^19", "react": "^17 || ^18 || ^19", "react-dom": "^17 || ^18 || ^19" } }, "sha512-tpVE+Pw0SFUD36JRmOozWDsEY4ne47uAM7n8487a/NOgUPlNYB6uFKgYHnJC9dKO2ScwUM5iv3ZoiusOhw8tRA=="],
 
-    "@msviderok/base-ui-solid": ["@msviderok/base-ui-solid@1.0.0-beta.5", "https://npm.pkg.github.com/download/@msviderok/base-ui-solid/1.0.0-beta.5/fc95f7f52e5f5a6c9daebf448360d7b59c2afd01", { "dependencies": { "@babel/runtime": "^7.27.6", "@floating-ui/dom": "^1.7.2", "@floating-ui/utils": "^0.2.10", "@solid-primitives/props": "^3.2.2", "@solidjs/router": "^0.15.3", "babel-preset-solid": "^1.9.10", "tabbable": "^6.2.0" }, "peerDependencies": { "solid-js": "^1.9.7" } }, "sha512-Q0SEy80pQc1cBmXWHmABrtcX9jQEvvAj0FVWsBTol153jLgUPJacX4PJlR6qEelUHEb9X7s2NsH5dG1bvx+9og=="],
+    "@msviderok/base-ui-solid": ["@msviderok/base-ui-solid@1.0.0-beta.6", "https://npm.pkg.github.com/download/@msviderok/base-ui-solid/1.0.0-beta.6/bd1e8b4691f3fa1af195b54a68e3463c85072779", { "dependencies": { "@babel/runtime": "^7.27.6", "@floating-ui/dom": "^1.7.2", "@floating-ui/utils": "^0.2.10", "@solid-primitives/props": "^3.2.2", "@solidjs/router": "^0.15.3", "babel-preset-solid": "^1.9.10", "tabbable": "^6.2.0" }, "peerDependencies": { "solid-js": "^1.9.7" } }, "sha512-QwQqaNJX3QLjOFg7ftG/b7eUbpiOvhWES1HD01wL82QWhQljj4P8jLDMfmX7unejGNC+w2SwZWupOMNdJ8JVMA=="],
 
     "@mswjs/interceptors": ["@mswjs/interceptors@0.40.0", "", { "dependencies": { "@open-draft/deferred-promise": "^2.2.0", "@open-draft/logger": "^0.3.0", "@open-draft/until": "^2.0.0", "is-node-process": "^1.2.0", "outvariant": "^1.4.3", "strict-event-emitter": "^0.5.1" } }, "sha512-EFd6cVbHsgLa6wa4RljGj6Wk75qoHxUSyc5asLyyPSyuhIcdS2Q3Phw6ImS1q+CkALthJRShiYfKANcQMuMqsQ=="],
 
