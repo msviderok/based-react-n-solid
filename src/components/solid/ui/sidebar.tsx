@@ -387,7 +387,7 @@ function SidebarGroup(props: ComponentProps<"div">) {
 
 function SidebarGroupLabel(props: useRender.ComponentProps<"div"> & ComponentProps<"div">) {
   const [local, rest] = splitProps(props, ["class", "render"]);
-  return useRender({
+  const element = useRender({
     props: mergeProps<"div">(
       {
         get class() {
@@ -407,11 +407,13 @@ function SidebarGroupLabel(props: useRender.ComponentProps<"div"> & ComponentPro
       sidebar: "group-label",
     },
   });
+
+  return <>{element()}</>;
 }
 
 function SidebarGroupAction(props: useRender.ComponentProps<"button"> & ComponentProps<"button">) {
   const [local, rest] = splitProps(props, ["class", "render"]);
-  return useRender({
+  const element = useRender({
     props: mergeProps<"button">(
       {
         get class() {
@@ -431,6 +433,8 @@ function SidebarGroupAction(props: useRender.ComponentProps<"button"> & Componen
       sidebar: "group-action",
     },
   });
+
+  return <>{element()}</>;
 }
 
 function SidebarGroupContent(props: ComponentProps<"div">) {
@@ -560,7 +564,7 @@ function SidebarMenuAction(
 ) {
   const [local, rest] = splitProps(props, ["class", "render", "showOnHover"]);
   const showOnHover = () => local.showOnHover || false;
-  return useRender({
+  const element = useRender({
     props: mergeProps<"button">(
       {
         get class() {
@@ -582,6 +586,8 @@ function SidebarMenuAction(
       sidebar: "menu-action",
     },
   });
+
+  return <>{element()}</>;
 }
 
 function SidebarMenuBadge(props: ComponentProps<"div">) {
@@ -665,7 +671,7 @@ function SidebarMenuSubButton(
   const [local, rest] = splitProps(props, ["class", "render", "size", "isActive"]);
   const size = () => local.size || "md";
   const isActive = () => local.isActive || false;
-  return useRender({
+  const element = useRender({
     props: mergeProps<"a">(
       {
         get class() {
@@ -691,6 +697,8 @@ function SidebarMenuSubButton(
       },
     },
   });
+
+  return <>{element()}</>;
 }
 
 function ToggleIcon(props: ComponentProps<"svg">) {

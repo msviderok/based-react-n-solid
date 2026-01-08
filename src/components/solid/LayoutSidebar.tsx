@@ -1,7 +1,7 @@
-/** @jsxImportSource react */
+/** @jsxImportSource solid-js */
 import { COMPLIST } from "@/lib/store";
 import { capitalize, cn } from "@/lib/utils";
-import { useEffect, useState } from "react";
+import { createEffect, createSignal, onCleanup, onMount, Show, type ParentProps } from "solid-js";
 import { StyleSwitch } from "./StyleSwitch";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
@@ -31,13 +31,13 @@ const CONTENTS = COMPLIST.map(([compName, variants]) => {
   };
 });
 
-export default function LayoutSidebar({ children }: { children: React.ReactNode }) {
-  const [activeId, setActiveId] = useState<string>("");
+export default function LayoutSidebar(props: ParentProps) {
+  const [activeId, setActiveId] = createSignal("");
 
-  useEffect(() => {
-    if (!activeId) return;
+  createEffect(() => {
+    if (!activeId()) return;
 
-    const item = document.querySelector(`[data-comp-id="${activeId}"]`) as HTMLElement | null;
+    const item = document.querySelector(`[data-comp-id="${activeId()}"]`) as HTMLElement | null;
     const contentRoot = document.querySelector(
       '[data-slot="sidebar-content"]'
     ) as HTMLElement | null;
@@ -74,9 +74,9 @@ export default function LayoutSidebar({ children }: { children: React.ReactNode 
     targetScrollTop = Math.max(0, Math.min(targetScrollTop, maxScrollTop));
 
     scrollEl.scrollTo({ top: targetScrollTop, behavior: "smooth" });
-  }, [activeId]);
+  });
 
-  useEffect(() => {
+  onMount(() => {
     if (CONTENTS.length === 0) return;
 
     const latestById = new Map<string, IntersectionObserverEntry>();
@@ -173,44 +173,38 @@ export default function LayoutSidebar({ children }: { children: React.ReactNode 
     window.addEventListener("scroll", schedulePick, { passive: true });
     window.addEventListener("resize", schedulePick);
 
-    return () => {
+    onCleanup(() => {
       window.clearTimeout(timeoutId);
       window.removeEventListener("scroll", schedulePick);
       window.removeEventListener("resize", schedulePick);
       if (raf) window.cancelAnimationFrame(raf);
       observer.disconnect();
-    };
-  }, []);
+    });
+  });
 
   return (
-    <SidebarProvider className="flex-0">
-      <Content activeId={activeId} setActiveId={setActiveId} />
-      <main className="bg-background flex w-full flex-col rounded-xl p-8 max-w-[900px] relative gap-10">
+    <SidebarProvider class="flex-0">
+      <Content activeId={activeId()} setActiveId={setActiveId} />
+      <main class="bg-background flex w-full flex-col rounded-xl p-8 max-w-[900px] relative gap-10">
         <MobileSidebarToggle />
-        {children}
+        {props.children}
       </main>
     </SidebarProvider>
   );
 }
 
-function Content({
-  activeId,
-  setActiveId,
-}: {
-  activeId: string;
-  setActiveId: (id: string) => void;
-}) {
+function Content(props: { activeId: string; setActiveId: (id: string) => void }) {
   const { isMobile } = useSidebar();
 
   return (
     <Sidebar
-      collapsible={isMobile ? "offExamples" : "none"}
-      className={cn("border-x justify-center h-svh", !isMobile && "sticky top-0")}
+      collapsible={isMobile() ? "offExamples" : "none"}
+      class={cn("border-x justify-center h-svh", !isMobile() && "sticky top-0")}
     >
-      <SidebarHeader className="flex flex-col gap-4 border-b border-border p-4">
+      <SidebarHeader class="flex flex-col gap-4 border-b border-border p-4">
         <div>
-          <h1 className="text-lg font-bold text-foreground">Base UI for Solid</h1>
-          <h2 className="text-xs text-muted-foreground">Cross-Framework Showcase</h2>
+          <h1 class="text-lg font-bold text-foreground">Base UI for Solid</h1>
+          <h2 class="text-xs text-muted-foreground">Cross-Framework Showcase</h2>
         </div>
         <StyleSwitch />
       </SidebarHeader>
@@ -219,13 +213,13 @@ function Content({
           <SidebarGroupLabel>Components</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu
-              data-mobile={isMobile ? "true" : undefined}
-              className={cn(isMobile && "gap-1.5")}
+              data-mobile={isMobile() ? "true" : undefined}
+              class={cn(isMobile() && "gap-1.5")}
             >
               {CONTENTS.map((component) => (
-                <SidebarMenuItem key={component.id} data-comp-id={component.id}>
+                <SidebarMenuItem data-comp-id={component.id}>
                   <SidebarMenuButton
-                    isActive={activeId === component.id}
+                    isActive={props.activeId === component.id}
                     onClick={() => {
                       const element = document.getElementById(component.id);
                       if (element) {
@@ -239,19 +233,23 @@ function Content({
                         });
                       }
                     }}
-                    className={cn("justify-between", isMobile && "text-sm h-10 py-2.5")}
+                    class={cn("justify-between", isMobile() && "text-sm h-10 py-2.5")}
                   >
-                    <span className={cn("truncate font-semibold", isMobile && "text-sm")}>
+                    <span class={cn("truncate font-semibold", isMobile() && "text-sm")}>
                       {component.name}
                     </span>
 
                     <Tooltip>
                       <TooltipTrigger
-                        render={
-                          <Badge variant="outline" className="opacity-60 size-5 text-xs scale-80">
+                        render={(props) => (
+                          <Badge
+                            {...props}
+                            variant="outline"
+                            class={cn("opacity-60 size-5 text-xs scale-80", props.class)}
+                          >
                             {component.variants.length}
                           </Badge>
-                        }
+                        )}
                       />
                       <TooltipContent side="right" sideOffset={24}>
                         Includes {component.variants.length} variant
@@ -266,15 +264,15 @@ function Content({
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="border-t border-border pt-4">
-        <div className="flex flex-col text-sm gap-2">
-          <p className="text-muted-foreground flex items-center">
-            <Button variant="link" className="px-1 py-0 text-primary/70" size="sm">
+      <SidebarFooter class="border-t border-border pt-4">
+        <div class="flex flex-col text-sm gap-2">
+          <p class="text-muted-foreground flex items-center">
+            <Button variant="link" class="px-1 py-0 text-primary/70" size="sm">
               <a
                 href="https://github.com/msviderok/base-ui"
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-1.5"
+                class="flex items-center gap-1.5"
               >
                 <GithubIcon />
                 Base UI for Solid
@@ -282,9 +280,9 @@ function Content({
             </Button>
           </p>
 
-          <p className="text-muted-foreground ">
-            <span className="text-xs">Amateur-grade Base UI port for Solid JS created by</span>
-            <Button variant="link" className="px-1 py-0 text-primary/70" size="sm">
+          <p class="text-muted-foreground ">
+            <span class="text-xs">Amateur-grade Base UI port for Solid JS created by</span>
+            <Button variant="link" class="px-1 py-0 text-primary/70" size="sm">
               <a href="https://github.com/msviderok" target="_blank" rel="noreferrer">
                 @msviderok
               </a>
@@ -300,14 +298,12 @@ function Content({
 function MobileSidebarToggle() {
   const { isMobile, openMobile } = useSidebar();
 
-  if (!isMobile || openMobile) {
-    return null;
-  }
-
   return (
-    <div className="fixed top-4 left-0 z-50 md:hidden">
-      <SidebarTrigger className="rounded-none! rounded-r-md! bg-muted/80 backdrop-blur-sm border-r border-y border-border shadow-sm size-9 [&>svg]:size-4" />
-    </div>
+    <Show when={isMobile() && !openMobile()}>
+      <div class="fixed top-4 left-0 z-50 md:hidden">
+        <SidebarTrigger class="rounded-none! rounded-r-md! bg-muted/80 backdrop-blur-sm border-r border-y border-border shadow-sm size-9 [&>svg]:size-4" />
+      </div>
+    </Show>
   );
 }
 
@@ -316,7 +312,7 @@ function GithubIcon() {
     <svg
       role="img"
       viewBox="0 0 24 24"
-      className="size-4 -ml-1 relative -top-px"
+      class="size-4 -ml-1 relative -top-px"
       xmlns="http://www.w3.org/2000/svg"
       fill="currentColor"
     >

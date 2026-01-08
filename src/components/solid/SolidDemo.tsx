@@ -5,7 +5,7 @@ import { onMount } from "solid-js";
 import { Dynamic } from "solid-js/web";
 import demos from "./demos";
 
-export function SolidComponent(props: { component: string; variant: string }) {
+export default function SolidDemo(props: { component: string; variant: string }) {
   const style = useStore(styling);
   const Comp = () => (demos as any)[props.component][props.variant][style()];
 

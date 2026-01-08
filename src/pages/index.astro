@@ -1,37 +1,39 @@
 ---
-import Section from "@/components/react/Section";
-import { SolidComponent } from "@/components/solid";
-import { ReactComponent } from "@/components/react";
-import { LayoutSidebar } from "@/components/react/LayoutSidebar";
+import ReactSection from "@/components/react/Section";
+import SolidSection from "@/components/solid/Section";
+import SolidDemo from "@/components/solid/SolidDemo";
+import ReactDemo from "@/components/react/ReactDemo";
+import SolidLayoutSidebar from "@/components/solid/LayoutSidebar";
+import ReactLayoutSidebar from "@/components/react/LayoutSidebar";
 import Layout from "@/Layout.astro";
 import { COMPLIST } from "@/lib/store";
 import LayoutSkeleton from "@/components/astro/LayoutSkeleton.astro";
 ---
 
 <Layout>
-  <LayoutSidebar client:only="react">
+  <ReactLayoutSidebar client:only="react">
     {
       COMPLIST.map(([component, variants, { minWidth } = {}]) => (
-        <Section.Root client:only="react" component={component}>
+        <ReactSection.Root client:only="react" component={component}>
           {variants.map((variant) => (
-            <Section.Variant
+            <ReactSection.Variant
               component={component}
               variant={variant}
               minWidth={minWidth}
               client:only="react"
             >
-              <Section.VariantSolid client:only="react">
-                <SolidComponent component={component} variant={variant} client:only="solid-js" />
-              </Section.VariantSolid>
-              <Section.VariantReact client:only="react">
-                <ReactComponent component={component} variant={variant} client:only="react" />
-              </Section.VariantReact>
-            </Section.Variant>
+              <ReactSection.VariantSolid client:only="react">
+                <SolidDemo component={component} variant={variant} client:only="solid-js" />
+              </ReactSection.VariantSolid>
+              <ReactSection.VariantReact client:only="react">
+                <ReactDemo component={component} variant={variant} client:only="react" />
+              </ReactSection.VariantReact>
+            </ReactSection.Variant>
           ))}
-        </Section.Root>
+        </ReactSection.Root>
       ))
     }
-  </LayoutSidebar>
+  </ReactLayoutSidebar>
 
   <LayoutSkeleton />
 </Layout>
@@ -42,7 +44,7 @@ import LayoutSkeleton from "@/components/astro/LayoutSkeleton.astro";
 
   const layoutSkeleton = document.getElementById("layout-skeleton");
   effect([solidLoaded, reactLoaded], (solid, react) => {
-    if (solidLoaded.get() && reactLoaded.get()) {
+    if (solid && react) {
       layoutSkeleton?.classList.add("opacity-0");
       layoutSkeleton?.classList.remove("opacity-100");
       document.body.classList.remove("overflow-hidden");

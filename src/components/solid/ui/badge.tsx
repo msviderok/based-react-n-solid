@@ -31,7 +31,7 @@ function Badge(props: useRender.ComponentProps<"span"> & VariantProps<typeof bad
   const [local, rest] = splitProps(props, ["class", "variant", "render"]);
   const variant = () => local.variant || "default";
 
-  return useRender({
+  const element = useRender({
     props: mergeProps<"span">(
       {
         get class() {
@@ -50,6 +50,8 @@ function Badge(props: useRender.ComponentProps<"span"> & VariantProps<typeof bad
       },
     },
   });
+
+  return <>{element()}</>;
 }
 
 export { Badge, badgeVariants };
