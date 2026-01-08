@@ -5,6 +5,7 @@ import { ReactComponent } from "@/components/react";
 import { LayoutSidebar } from "@/components/react/LayoutSidebar";
 import Layout from "@/Layout.astro";
 import { COMPLIST } from "@/lib/store";
+import LayoutSkeleton from "@/components/astro/LayoutSkeleton.astro";
 ---
 
 <Layout>
@@ -13,7 +14,12 @@ import { COMPLIST } from "@/lib/store";
       COMPLIST.map(([component, variants, { minWidth } = {}]) => (
         <Section.Root client:only="react" component={component}>
           {variants.map((variant) => (
-            <Section.Variant component={component} variant={variant} minWidth={minWidth} client:only="react">
+            <Section.Variant
+              component={component}
+              variant={variant}
+              minWidth={minWidth}
+              client:only="react"
+            >
               <Section.VariantSolid client:only="react">
                 <SolidComponent component={component} variant={variant} client:only="solid-js" />
               </Section.VariantSolid>
@@ -26,4 +32,21 @@ import { COMPLIST } from "@/lib/store";
       ))
     }
   </LayoutSidebar>
+
+  <LayoutSkeleton />
 </Layout>
+
+<script>
+  import { solidLoaded, reactLoaded } from "@/lib/store";
+  import { effect } from "nanostores";
+
+  const layoutSkeleton = document.getElementById("layout-skeleton");
+  effect([solidLoaded, reactLoaded], (solid, react) => {
+    if (solidLoaded.get() && reactLoaded.get()) {
+      layoutSkeleton?.classList.add("opacity-0");
+      layoutSkeleton?.classList.remove("opacity-100");
+      document.body.classList.remove("overflow-hidden");
+      setTimeout(() => layoutSkeleton?.remove(), 200);
+    }
+  });
+</script>

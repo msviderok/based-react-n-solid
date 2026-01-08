@@ -2,7 +2,7 @@ import { LogoReact } from "@/components/react/LogoReact";
 import { LogoSolid } from "@/components/react/LogoSolid";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { isComponentAvailable } from "@/lib/component-availability";
+import { isComponentAvailable } from "@/lib/isComponentAvailable";
 import { styling } from "@/lib/store";
 import { capitalize, cn } from "@/lib/utils";
 import { useStore } from "@nanostores/react";

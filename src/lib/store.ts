@@ -1,11 +1,5 @@
 import { persistentAtom } from "@nanostores/persistent";
-import { computed } from "nanostores";
-
-type SectionsState = Record<string, Section>;
-interface Section {
-  open: boolean;
-  variants: string[];
-}
+import { computed, map } from "nanostores";
 
 export const COMPLIST: [string, string[], { minWidth?: number }?][] = [
   ["accordion", ["hero"]],
@@ -42,6 +36,25 @@ export const COMPLIST: [string, string[], { minWidth?: number }?][] = [
   ["tooltip", ["hero"]],
 ];
 
+// Styling
+export const styling = persistentAtom<"CssModules" | "Tailwind">("styling", "CssModules");
+
+// Mounted state of components
+export const solidComponentLoaded = map(
+  Object.fromEntries(COMPLIST.map(([compName]) => [compName, false]))
+);
+export const reactComponentLoaded = map(
+  Object.fromEntries(COMPLIST.map(([compName]) => [compName, false]))
+);
+export const reactLoaded = computed(reactComponentLoaded, (c) => Object.values(c).every(Boolean));
+export const solidLoaded = computed(solidComponentLoaded, (c) => Object.values(c).every(Boolean));
+
+// Sections
+type SectionsState = Record<string, Section>;
+interface Section {
+  open: boolean;
+  variants: string[];
+}
 const initialSections: SectionsState = COMPLIST.reduce<SectionsState>(
   (acc, [compName, variants]) => {
     acc[compName] = { open: false, variants };
@@ -49,15 +62,12 @@ const initialSections: SectionsState = COMPLIST.reduce<SectionsState>(
   },
   {}
 );
-
-export const styling = persistentAtom<"CssModules" | "Tailwind">("styling", "CssModules");
 export const sections = persistentAtom<SectionsState>("sections", initialSections, {
   encode: JSON.stringify,
   decode: JSON.parse,
 });
 
 export const sectionsArray = computed(sections, (sections) => Object.keys(sections));
-
 export const openSections = computed(sections, (sections) =>
   Object.keys(sections).filter((item) => sections[item].open)
 );
