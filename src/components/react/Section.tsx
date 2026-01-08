@@ -114,7 +114,7 @@ function VariantReact(props: { children: React.ReactNode }) {
   return (
     <div className="relative bg-card">
       <div className="absolute inset-0 bg-muted/5 pointer-events-none" />
-      <div className="absolute inset-0 opacity-[0.04] pointer-events-none overflow-hidden">
+      <div className="absolute inset-0 opacity-[0.05]">
         <div
           className="absolute inset-0"
           style={{
