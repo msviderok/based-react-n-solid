@@ -9,9 +9,9 @@
 @layer components;
 @layer utilities;
 
-@import 'tailwindcss/preflight' layer(base);
-@import 'tailwindcss/theme' layer(theme);
-@import 'tailwindcss/utilities' layer(utilities);
+@import "tailwindcss/preflight" layer(base);
+@import "tailwindcss/theme" layer(theme);
+@import "tailwindcss/utilities" layer(utilities);
 
 :root {
   --background: oklch(0.141 0.005 285.823);
@@ -254,4 +254,3 @@
 @custom-media --2xl (min-width: 96rem); /* stylelint-disable-line custom-media-pattern */
 @custom-media --show-side-nav (min-width: 64rem);
 @custom-media --show-quick-nav (min-width: 84rem);
-na
