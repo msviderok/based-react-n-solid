@@ -7,11 +7,9 @@ import { useEffect, useRef, useState } from "react";
 function Root(props: { component: string; children: React.ReactNode }) {
   return (
     <section id={props.component} className="scroll-mt-24 mb-16">
-      <div className="mb-6">
+      <div className="sticky top-0 z-10 bg-background pb-2 pt-2 -mx-8 px-8 mb-6">
         <div className="flex items-center gap-3 mb-2">
-          <h2 className="text-3xl font-bold text-foreground/80 sticky top-0 left-0">
-            {capitalize(props.component)}
-          </h2>
+          <h2 className="text-3xl font-bold text-foreground/80">{capitalize(props.component)}</h2>
         </div>
       </div>
 

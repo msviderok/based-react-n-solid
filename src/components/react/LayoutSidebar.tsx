@@ -184,7 +184,8 @@ export function LayoutSidebar({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider className="flex-0">
       <Content activeId={activeId} setActiveId={setActiveId} />
-      <main className="bg-background flex w-full flex-col rounded-xl p-8 max-w-[900px]">
+      <main className="bg-background flex w-full flex-col rounded-xl p-8 max-w-[900px] relative">
+        <MobileSidebarToggle />
         {children}
       </main>
     </SidebarProvider>
@@ -216,7 +217,10 @@ function Content({
         <SidebarGroup>
           <SidebarGroupLabel>Components</SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu
+              data-mobile={isMobile ? "true" : undefined}
+              className={cn(isMobile && "gap-1.5")}
+            >
               {CONTENTS.map((component) => (
                 <SidebarMenuItem key={component.id} data-comp-id={component.id}>
                   <SidebarMenuButton
@@ -234,9 +238,11 @@ function Content({
                         });
                       }
                     }}
-                    className="justify-between"
+                    className={cn("justify-between", isMobile && "text-sm h-10 py-2.5")}
                   >
-                    <span className="truncate font-semibold">{component.name}</span>
+                    <span className={cn("truncate font-semibold", isMobile && "text-sm")}>
+                      {component.name}
+                    </span>
 
                     <Tooltip>
                       <TooltipTrigger
@@ -287,6 +293,20 @@ function Content({
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
+  );
+}
+
+function MobileSidebarToggle() {
+  const { isMobile, openMobile } = useSidebar();
+
+  if (!isMobile || openMobile) {
+    return null;
+  }
+
+  return (
+    <div className="fixed top-4 left-0 z-50 md:hidden">
+      <SidebarTrigger className="rounded-none! rounded-r-md! bg-muted/80 backdrop-blur-sm border-r border-y border-border shadow-sm size-9 [&>svg]:size-4" />
+    </div>
   );
 }
 
