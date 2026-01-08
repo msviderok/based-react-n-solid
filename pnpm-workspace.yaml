@@ -1,2 +1,3 @@
 patchedDependencies:
   '@msviderok/base-ui-react': patches/@msviderok__base-ui-react.patch
+  '@msviderok/base-ui-solid': patches/@msviderok__base-ui-solid.patch
