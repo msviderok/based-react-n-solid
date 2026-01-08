@@ -9,7 +9,7 @@ import { fileURLToPath } from "url";
 // https://astro.build/config
 export default defineConfig({
   integrations: [
-    react({ include: ["**/react/**/*.{ts,tsx}", "**/ui/**/*.{ts,tsx}"] }),
+    react({ include: ["**/react/**/*.{ts,tsx}"] }),
     solid({ include: ["**/solid/**/*.{ts,tsx}"] }),
   ],
   vite: {

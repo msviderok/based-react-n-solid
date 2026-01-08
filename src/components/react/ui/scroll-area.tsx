@@ -1,7 +1,6 @@
+import { cn } from "@/lib/utils";
 import { ScrollArea as ScrollAreaPrimitive } from "@msviderok/base-ui-react/scroll-area";
 import * as React from "react";
-
-import { cn } from "@/lib/utils";
 
 function ScrollArea({ className, children, ...props }: ScrollAreaPrimitive.Root.Props) {
   return (

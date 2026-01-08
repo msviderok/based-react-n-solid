@@ -1,7 +1,6 @@
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { styling } from "@/lib/store";
-import { cn } from "@/lib/utils";
 import { useStore } from "@nanostores/react";
+import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
 
 export function StyleSwitch() {
   const currentStyling = useStore(styling);

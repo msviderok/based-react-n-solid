@@ -1,12 +1,12 @@
-import { LogoReact } from "@/components/react/LogoReact";
-import { LogoSolid } from "@/components/react/LogoSolid";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import { isComponentAvailable } from "@/lib/isComponentAvailable";
 import { styling } from "@/lib/store";
 import { capitalize, cn } from "@/lib/utils";
 import { useStore } from "@nanostores/react";
 import { useEffect, useRef, useState } from "react";
+import { LogoReact } from "./LogoReact";
+import { LogoSolid } from "./LogoSolid";
+import { Badge } from "./ui/badge";
+import { Separator } from "./ui/separator";
 
 function Root(props: { component: string; children: React.ReactNode }) {
   return (

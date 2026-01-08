@@ -1,6 +1,9 @@
-import { StyleSwitch } from "@/components/react/StyleSwitch";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { COMPLIST } from "@/lib/store";
+import { capitalize, cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
+import { StyleSwitch } from "./StyleSwitch";
+import { Badge } from "./ui/badge";
+import { Button } from "./ui/button";
 import {
   Sidebar,
   SidebarContent,
@@ -16,11 +19,8 @@ import {
   SidebarRail,
   SidebarTrigger,
   useSidebar,
-} from "@/components/ui/sidebar";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { COMPLIST } from "@/lib/store";
-import { capitalize, cn } from "@/lib/utils";
-import { useEffect, useState } from "react";
+} from "./ui/sidebar";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 const CONTENTS = COMPLIST.map(([compName, variants]) => {
   return {
