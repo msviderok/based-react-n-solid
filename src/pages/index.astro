@@ -13,7 +13,7 @@ import { COMPLIST } from "@/lib/store";
       COMPLIST.map(([component, variants, { minWidth } = {}]) => (
         <Section.Root client:only="react" component={component}>
           {variants.map((variant) => (
-            <Section.Variant variant={variant} minWidth={minWidth} client:only="react">
+            <Section.Variant component={component} variant={variant} minWidth={minWidth} client:only="react">
               <Section.VariantSolid client:only="react">
                 <SolidComponent component={component} variant={variant} client:only="solid-js" />
               </Section.VariantSolid>

@@ -1,26 +1,35 @@
 import { LogoReact } from "@/components/react/LogoReact";
 import { LogoSolid } from "@/components/react/LogoSolid";
+import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { isComponentAvailable } from "@/lib/component-availability";
+import { styling } from "@/lib/store";
 import { capitalize, cn } from "@/lib/utils";
+import { useStore } from "@nanostores/react";
 import { useEffect, useRef, useState } from "react";
 
 function Root(props: { component: string; children: React.ReactNode }) {
   return (
     <section id={props.component} className="scroll-mt-24 mb-16">
-      <div className="sticky top-0 z-10 bg-background pb-2 pt-2 -mx-8 px-8 mb-6">
-        <div className="flex items-center gap-3 mb-2">
-          <h2 className="text-3xl font-bold text-foreground/80">{capitalize(props.component)}</h2>
-        </div>
+      <div className="sticky top-0 z-10 bg-background pb-2 pt-2 -mx-8 px-8">
+        <h2 className="text-3xl font-bold text-foreground/80">{capitalize(props.component)}</h2>
       </div>
 
-      <div className="space-y-12 flex flex-col gap-4">{props.children}</div>
+      <div className="space-y-12 flex flex-col gap-6">{props.children}</div>
     </section>
   );
 }
 
-function Variant(props: { variant: string; minWidth?: number; children: React.ReactNode }) {
+function Variant(props: {
+  component: string;
+  variant: string;
+  minWidth?: number;
+  children: React.ReactNode;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const [enforceLayoutChange, setEnforceLayoutChange] = useState(false);
+  const currentStyle = useStore(styling);
+  const availability = isComponentAvailable(props.component, props.variant, currentStyle);
 
   useEffect(() => {
     if (ref.current && props.minWidth !== undefined) {
@@ -29,6 +38,26 @@ function Variant(props: { variant: string; minWidth?: number; children: React.Re
       }
     }
   }, [props.minWidth]);
+
+  // If neither React nor Solid component is available, show strikethrough variant name with badge
+  if (!availability.react && !availability.solid) {
+    const styleName = currentStyle === "CssModules" ? "CSS Modules" : "Tailwind";
+    return (
+      <div className="relative">
+        <div className="mb-2 flex items-center gap-2">
+          <span className="text-xs font-medium text-foreground/60 uppercase tracking-wider line-through">
+            {capitalize(props.variant)}
+          </span>
+          <Badge
+            variant="outline"
+            className="text-xs bg-amber-50/50 dark:bg-amber-950/20 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-800/50 flex items-center gap-1"
+          >
+            No {styleName} version <Frown />
+          </Badge>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div ref={ref} className={cn("relative")}>
@@ -105,6 +134,29 @@ function VariantReact(props: { children: React.ReactNode }) {
         {props.children}
       </div>
     </div>
+  );
+}
+
+function Frown() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className="inline-block scale-120"
+    >
+      <circle cx="12" cy="12" r="10"></circle>
+      <path d="M16 16s-1.5-2-4-2-4 2-4 2"></path>
+      <line x1="9" x2="9.01" y1="9" y2="9"></line>
+      <line x1="15" x2="15.01" y1="9" y2="9"></line>
+    </svg>
   );
 }
 

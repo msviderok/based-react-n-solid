@@ -184,7 +184,7 @@ export function LayoutSidebar({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider className="flex-0">
       <Content activeId={activeId} setActiveId={setActiveId} />
-      <main className="bg-background flex w-full flex-col rounded-xl p-8 max-w-[900px] relative">
+      <main className="bg-background flex w-full flex-col rounded-xl p-8 max-w-[900px] relative gap-10">
         <MobileSidebarToggle />
         {children}
       </main>
