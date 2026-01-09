@@ -14,10 +14,10 @@ import {
   splitProps,
   Switch,
   useContext,
+  type Accessor,
   type ComponentProps,
   type JSX,
 } from "solid-js";
-import { useIsMobile } from "../hooks";
 import { Button } from "./button";
 import { ScrollArea } from "./scroll-area";
 import { Separator } from "./separator";
@@ -722,6 +722,24 @@ function ToggleIcon(props: ComponentProps<"svg">) {
   );
 }
 
+function useIsMobile(mobileBreakpoint: Accessor<number> | number = 768) {
+  const [isMobile, setIsMobile] = createSignal<boolean>();
+  const breakpoint = () =>
+    typeof mobileBreakpoint === "function" ? mobileBreakpoint() : mobileBreakpoint;
+
+  createEffect(() => {
+    const mql = window.matchMedia(`(max-width: ${breakpoint() - 1}px)`);
+    const onChange = () => {
+      setIsMobile(window.innerWidth < breakpoint());
+    };
+    mql.addEventListener("change", onChange);
+    setIsMobile(window.innerWidth < breakpoint());
+    onCleanup(() => mql.removeEventListener("change", onChange));
+  });
+
+  return () => !!isMobile();
+}
+
 export {
   Sidebar,
   SidebarContent,
@@ -745,5 +763,6 @@ export {
   SidebarRail,
   SidebarSeparator,
   SidebarTrigger,
+  useIsMobile,
   useSidebar,
 };

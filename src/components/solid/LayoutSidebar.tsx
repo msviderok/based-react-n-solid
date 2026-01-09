@@ -1,7 +1,16 @@
 /** @jsxImportSource solid-js */
 import { COMPLIST } from "@/lib/store";
 import { capitalize, cn } from "@/lib/utils";
-import { createEffect, createSignal, onCleanup, onMount, Show, type ParentProps } from "solid-js";
+import {
+  createEffect,
+  createSignal,
+  onCleanup,
+  onMount,
+  Show,
+  type Accessor,
+  type ParentProps,
+} from "solid-js";
+import { FrameworkSwitch } from "./FrameworkSwitch";
 import { StyleSwitch } from "./StyleSwitch";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
@@ -206,6 +215,7 @@ function Content(props: { activeId: string; setActiveId: (id: string) => void })
           <h1 class="text-lg font-bold text-foreground">Base UI for Solid</h1>
           <h2 class="text-xs text-muted-foreground">Cross-Framework Showcase</h2>
         </div>
+        <FrameworkSwitch />
         <StyleSwitch />
       </SidebarHeader>
       <SidebarContent>

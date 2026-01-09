@@ -8,6 +8,12 @@ import { fileURLToPath } from "url";
 
 // https://astro.build/config
 export default defineConfig({
+  redirects: {
+    "/": "/layout/solid",
+    "/solid": "/layout/solid",
+    "/react": "/layout/react",
+    "/layout/solid-js": "/layout/solid",
+  },
   integrations: [
     react({ include: ["**/react/**/*.{ts,tsx}"] }),
     solid({ include: ["**/solid/**/*.{ts,tsx}"] }),

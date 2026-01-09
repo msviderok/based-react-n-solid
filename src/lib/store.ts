@@ -39,6 +39,9 @@ export const COMPLIST: [string, string[], { minWidth?: number }?][] = [
 // Styling
 export const styling = persistentAtom<"CssModules" | "Tailwind">("styling", "CssModules");
 
+// Framework selection
+export const framework = persistentAtom<"react" | "solid">("framework", "react");
+
 // Mounted state of components
 export const solidComponentLoaded = map(
   Object.fromEntries(COMPLIST.map(([compName]) => [compName, false]))

@@ -1,4 +1,3 @@
-import { useIsMobile } from "@/lib/hooks";
 import { cn } from "@/lib/utils";
 import { mergeProps } from "@msviderok/base-ui-react/merge-props";
 import { useRender } from "@msviderok/base-ui-react/use-render";
@@ -676,6 +675,22 @@ function ToggleIcon(props: { className?: string }) {
       <path d="M21 5v14" />
     </svg>
   );
+}
+
+function useIsMobile(mobileBreakpoint = 768) {
+  const [isMobile, setIsMobile] = React.useState<boolean | undefined>(undefined);
+
+  React.useEffect(() => {
+    const mql = window.matchMedia(`(max-width: ${mobileBreakpoint - 1}px)`);
+    const onChange = () => {
+      setIsMobile(window.innerWidth < mobileBreakpoint);
+    };
+    mql.addEventListener("change", onChange);
+    setIsMobile(window.innerWidth < mobileBreakpoint);
+    return () => mql.removeEventListener("change", onChange);
+  }, [mobileBreakpoint]);
+
+  return !!isMobile;
 }
 
 export {

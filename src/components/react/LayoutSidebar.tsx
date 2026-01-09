@@ -2,6 +2,7 @@
 import { COMPLIST } from "@/lib/store";
 import { capitalize, cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
+import { FrameworkSwitch } from "./FrameworkSwitch";
 import { StyleSwitch } from "./StyleSwitch";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
@@ -212,6 +213,7 @@ function Content({
           <h1 className="text-lg font-bold text-foreground">Base UI for Solid</h1>
           <h2 className="text-xs text-muted-foreground">Cross-Framework Showcase</h2>
         </div>
+        <FrameworkSwitch />
         <StyleSwitch />
       </SidebarHeader>
       <SidebarContent>

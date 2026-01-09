@@ -1,5 +1,6 @@
 ---
 import "./index.css";
+import LayoutSkeleton from "@/components/astro/LayoutSkeleton.astro";
 ---
 
 <!doctype html>
@@ -15,6 +16,7 @@ import "./index.css";
   <body class="bg-background overflow-hidden">
     <div class="min-h-screen relative z-0 max-w-max w-full mx-auto">
       <slot />
+      <LayoutSkeleton />
     </div>
   </body>
 </html>

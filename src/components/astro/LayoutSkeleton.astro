@@ -52,3 +52,19 @@ import SectionSkeleton from "./SectionSkeleton.astro";
     </main>
   </div>
 </div>
+
+<script>
+  import { solidLoaded, reactLoaded } from "@/lib/store";
+  import { effect } from "nanostores";
+
+  const layoutSkeleton = document.getElementById("layout-skeleton");
+  effect([solidLoaded, reactLoaded], (solid, react) => {
+    console.log({ solid, react });
+    if (solid && react) {
+      layoutSkeleton?.classList.add("opacity-0");
+      layoutSkeleton?.classList.remove("opacity-100");
+      document.body.classList.remove("overflow-hidden");
+      setTimeout(() => layoutSkeleton?.remove(), 200);
+    }
+  });
+</script>

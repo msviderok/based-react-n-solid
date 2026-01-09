@@ -1,0 +1,34 @@
+---
+import SolidSection from "@/components/solid/Section";
+import SolidDemo from "@/components/solid/SolidDemo";
+import ReactDemo from "@/components/react/ReactDemo";
+import SolidLayoutSidebar from "@/components/solid/LayoutSidebar";
+import Layout from "@/Layout.astro";
+import { COMPLIST } from "@/lib/store";
+---
+
+<Layout>
+  <SolidLayoutSidebar client:only="solid-js">
+    {
+      COMPLIST.map(([component, variants, { minWidth } = {}]) => (
+        <SolidSection.Root client:only="solid-js" component={component}>
+          {variants.map((variant) => (
+            <SolidSection.Variant
+              component={component}
+              variant={variant}
+              minWidth={minWidth}
+              client:only="solid-js"
+            >
+              <SolidSection.VariantSolid client:only="solid-js">
+                <SolidDemo component={component} variant={variant} client:only="solid-js" />
+              </SolidSection.VariantSolid>
+              <SolidSection.VariantReact client:only="solid-js">
+                <ReactDemo component={component} variant={variant} client:only="react" />
+              </SolidSection.VariantReact>
+            </SolidSection.Variant>
+          ))}
+        </SolidSection.Root>
+      ))
+    }
+  </SolidLayoutSidebar>
+</Layout>
