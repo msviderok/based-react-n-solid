@@ -16,7 +16,6 @@ import {
   useContext,
   type Accessor,
   type ComponentProps,
-  type JSX,
 } from "solid-js";
 import { Button } from "./button";
 import { ScrollArea } from "./scroll-area";
@@ -77,6 +76,7 @@ function SidebarProvider(
   const [_open, _setOpen] = createSignal<boolean>(defaultOpen());
   const open = () => local.open ?? _open();
   const setOpen = (value: boolean | ((value: boolean) => boolean)) => {
+    console.log({ value });
     const openState = typeof value === "function" ? value(open()) : value;
     if (local.onOpenChange) {
       local.onOpenChange(openState);
@@ -104,7 +104,7 @@ function SidebarProvider(
 
     window.addEventListener("keydown", handleKeyDown);
     onCleanup(() => window.removeEventListener("keydown", handleKeyDown));
-  }, [toggleSidebar]);
+  });
 
   // We add a state so that we can do data-state="expanded" or "collapsed".
   // This makes it easier to style the sidebar with Tailwind classes.
@@ -223,7 +223,7 @@ function Sidebar(
             data-sidebar="sidebar"
             data-slot="sidebar"
             data-mobile="true"
-            class="bg-sidebar text-sidebar-foreground p-0 [&>button]:hidden !w-[var(--sidebar-width)]"
+            class="bg-sidebar text-sidebar-foreground p-0 [&>button]:hidden w-(--sidebar-width)!"
             style={{
               "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
               width: SIDEBAR_WIDTH_MOBILE,

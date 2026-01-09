@@ -59,7 +59,6 @@ import SectionSkeleton from "./SectionSkeleton.astro";
 
   const layoutSkeleton = document.getElementById("layout-skeleton");
   effect([solidLoaded, reactLoaded], (solid, react) => {
-    console.log({ solid, react });
     if (solid && react) {
       layoutSkeleton?.classList.add("opacity-0");
       layoutSkeleton?.classList.remove("opacity-100");
