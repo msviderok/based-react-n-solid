@@ -4,11 +4,13 @@ import SolidDemo from "@/components/solid/SolidDemo";
 import ReactDemo from "@/components/react/ReactDemo";
 import SolidLayoutSidebar from "@/components/solid/LayoutSidebar";
 import Layout from "@/Layout.astro";
+import DescriptionSection from "@/components/astro/DescriptionSection.astro";
 import { COMPLIST } from "@/lib/store";
 ---
 
 <Layout>
   <SolidLayoutSidebar client:only="solid-js">
+    <DescriptionSection />
     {
       COMPLIST.map(([component, variants, { minWidth } = {}]) => (
         <SolidSection.Root client:only="solid-js" component={component}>

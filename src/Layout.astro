@@ -3,6 +3,7 @@ import "./index.css";
 import LayoutSkeleton from "@/components/astro/LayoutSkeleton.astro";
 import FrameworkIndicator from "@/components/astro/FrameworkIndicator.astro";
 import { ClientRouter } from "astro:transitions";
+import DescriptionSection from "@/components/astro/DescriptionSection.astro";
 ---
 
 <!doctype html>
@@ -21,16 +22,14 @@ import { ClientRouter } from "astro:transitions";
       <slot />
       <LayoutSkeleton />
     </div>
-
     <FrameworkIndicator transition:name="framework-indicator" />
   </body>
 </html>
 
-<style>
-  html,
-  body {
-    margin: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>
+<script>
+  import { styling } from "@/lib/store";
+
+  styling.subscribe((value) => {
+    document.documentElement.classList.toggle("css-modules", value === "CssModules");
+  });
+</script>

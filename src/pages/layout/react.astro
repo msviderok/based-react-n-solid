@@ -4,11 +4,13 @@ import ReactDemo from "@/components/react/ReactDemo";
 import ReactSection from "@/components/react/Section";
 import SolidDemo from "@/components/solid/SolidDemo";
 import Layout from "@/Layout.astro";
+import DescriptionSection from "@/components/astro/DescriptionSection.astro";
 import { COMPLIST } from "@/lib/store";
 ---
 
 <Layout transition:persist>
   <ReactLayoutSidebar client:only="react">
+    <DescriptionSection />
     {
       COMPLIST.map(([component, variants, { minWidth } = {}]) => (
         <ReactSection.Root client:only="react" component={component}>
