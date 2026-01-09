@@ -21,14 +21,14 @@ export function StyleSwitch() {
       <ToggleGroupItem
         value="Tailwind"
         aria-label="Tailwind"
-        className="hover:bg-primary/15! data-pressed:bg-primary/80! data-pressed:text-primary-foreground! data-pressed:shadow-[inset_0_4px_8px_rgba(0,0,0,0.3)]! data-[state=on]:bg-primary/80! data-[state=on]:text-primary-foreground! data-[state=on]:shadow-[inset_0_4px_8px_rgba(0,0,0,0.3)]! aria-pressed:bg-primary/80! aria-pressed:text-primary-foreground! aria-pressed:shadow-[inset_0_4px_8px_rgba(0,0,0,0.3)]!"
+        className="hover:bg-primary/15! data-pressed:bg-primary/30! data-pressed:text-secondary-foreground! data-pressed:shadow-[inset_0_4px_8px_rgba(0,0,0,0.3)]! data-[state=on]:bg-primary/30! data-[state=on]:text-secondary-foreground! data-[state=on]:shadow-[inset_0_4px_8px_rgba(0,0,0,0.3)]! aria-pressed:bg-primary/30! aria-pressed:text-secondary-foreground! aria-pressed:shadow-[inset_0_4px_8px_rgba(0,0,0,0.3)]!"
       >
         Tailwind
       </ToggleGroupItem>
       <ToggleGroupItem
         value="CssModules"
         aria-label="CSS Modules"
-        className="css-modules hover:bg-primary/15! data-pressed:bg-primary/80! data-pressed:text-primary-foreground! data-pressed:shadow-[inset_0_4px_8px_rgba(0,0,0,0.3)]! data-[state=on]:bg-primary/80! data-[state=on]:text-primary-foreground! data-[state=on]:shadow-[inset_0_4px_8px_rgba(0,0,0,0.3)]! aria-pressed:bg-primary/80! aria-pressed:text-primary-foreground! aria-pressed:shadow-[inset_0_4px_8px_rgba(0,0,0,0.3)]!"
+        className="css-modules hover:bg-primary/15! data-pressed:bg-primary/30! data-pressed:text-secondary-foreground! data-pressed:shadow-[inset_0_4px_8px_rgba(0,0,0,0.3)]! data-[state=on]:bg-primary/30! data-[state=on]:text-secondary-foreground! data-[state=on]:shadow-[inset_0_4px_8px_rgba(0,0,0,0.3)]! aria-pressed:bg-primary/30! aria-pressed:text-secondary-foreground! aria-pressed:shadow-[inset_0_4px_8px_rgba(0,0,0,0.3)]!"
       >
         CSS Modules
       </ToggleGroupItem>

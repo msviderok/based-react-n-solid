@@ -31,7 +31,7 @@ export function FrameworkSwitch() {
       <ToggleGroupItem
         value="react"
         aria-label="React"
-        className="hover:bg-primary/15! data-pressed:bg-primary/80! data-pressed:text-primary-foreground! data-pressed:shadow-[inset_0_4px_8px_rgba(0,0,0,0.3)]! data-[state=on]:bg-primary/80! data-[state=on]:text-primary-foreground! data-[state=on]:shadow-[inset_0_4pxdata-pressed:bg-primary/80!-pressed:bg-primary/80! aria-pressed:text-primary-foreground! aria-pressed:shadow-[inset_0_4px_8px_rgba(0,0,0,0.3)]!"
+        className="hover:bg-zinc-700/15! data-pressed:bg-zinc-700/80! data-pressed:text-secondary-foreground! data-pressed:shadow-[inset_0_4px_8px_rgba(0,0,0,0.3)]! data-[state=on]:bg-zinc-700/80! data-[state=on]:text-secondary-foreground! data-[state=on]:shadow-[inset_0_4pxdata-pressed:bg-zinc-700/80!-pressed:bg-zinc-700/80! aria-pressed:text-secondary-foreground! aria-pressed:shadow-[inset_0_4px_8px_rgba(0,0,0,0.3)]!"
       >
         <LogoReact className="size-4" aria-hidden="true" />
         React
@@ -39,7 +39,7 @@ export function FrameworkSwitch() {
       <ToggleGroupItem
         value="solid"
         aria-label="Solid"
-        className="hover:bg-primary/15! data-pressed:bg-primary/80! data-pressed:text-primary-foreground! data-pressed:shadow-[inset_0_4px_8px_rgba(0,0,0,0.3)]! data-[state=on]:bg-primary/80! data-[state=on]:text-primary-foreground! data-[state=on]:shadow-[inset_0_4pxdata-pressed:bg-primary/80!-pressed:bg-primary/80! aria-pressed:text-primary-foreground! aria-pressed:shadow-[inset_0_4px_8px_rgba(0,0,0,0.3)]!"
+        className="hover:bg-zinc-700/15! data-pressed:bg-zinc-700/80! data-pressed:text-secondary-foreground! data-pressed:shadow-[inset_0_4px_8px_rgba(0,0,0,0.3)]! data-[state=on]:bg-zinc-700/80! data-[state=on]:text-secondary-foreground! data-[state=on]:shadow-[inset_0_4pxdata-pressed:bg-zinc-700/80!-pressed:bg-zinc-700/80! aria-pressed:text-secondary-foreground! aria-pressed:shadow-[inset_0_4px_8px_rgba(0,0,0,0.3)]!"
       >
         <LogoSolid className="size-4" aria-hidden="true" />
         Solid
