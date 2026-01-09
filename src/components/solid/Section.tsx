@@ -35,7 +35,7 @@ function Variant(
 
   createEffect(() => {
     if (ref && props.minWidth !== undefined) {
-      if (ref.offsetWidth < props.minWidth) {
+      if (ref.offsetWidth < props.minWidth * 2) {
         setEnforceLayoutChange(true);
       }
     }
