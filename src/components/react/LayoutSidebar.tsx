@@ -308,8 +308,8 @@ function MobileSidebarToggle() {
   }
 
   return (
-    <div className="fixed top-4 left-0 z-50 md:hidden">
-      <SidebarTrigger className="rounded-none! rounded-r-md! bg-muted/80 backdrop-blur-sm border-r border-y border-border shadow-sm size-9 [&>svg]:size-4" />
+    <div className="fixed top-4 right-0 z-50 md:hidden rotate-180">
+      <SidebarTrigger className="rounded-none! rounded-r-md! bg-muted/80 backdrop-blur-sm border-r border-y border-border shadow-sm size-6 [&>svg]:size-4" />
     </div>
   );
 }

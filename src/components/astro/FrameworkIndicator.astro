@@ -1,0 +1,44 @@
+---
+// Astro component for framework indicator
+---
+
+<div
+  id="framework-indicator"
+  transition:name="framework-indicator"
+  class="fixed z-200 bottom-0 right-0 pointer-events-none flex items-center px-2 py-1 text-[8px] font-bold shadow-lg backdrop-blur-sm whitespace-nowrap bg-muted/90 text-foreground border border-border uppercase w-max h-max origin-bottom-right rounded-tl-lg translate-x-[5px] translate-y-[5px] opacity-50 bg-size-[20px_20px] bg-repeat"
+>
+  <p id="framework-indicator-text">Layout rendered with <span></span></p>
+</div>
+
+<script>
+  function updateFrameworkIndicator() {
+    const framework = window.location.pathname.includes("/layout/solid") ? "solid" : "react";
+    const content = document.getElementById("framework-indicator")!;
+    const text = document.querySelector("#framework-indicator-text > span")!;
+    const logo = {
+      react: `data:image/svg+xml;base64,${btoa(
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="-11.5 -10.23174 23 20.46348" width="20" height="20" opacity="0.1"><circle cx="0" cy="0" r="2.05" fill="#61dafb"/><g stroke="#61dafb" stroke-width="1" fill="none"><ellipse rx="11" ry="4.2"/><ellipse rx="11" ry="4.2" transform="rotate(60)"/><ellipse rx="11" ry="4.2" transform="rotate(120)"/></g></svg>'
+      )}`,
+      solid: `data:image/svg+xml;base64,${btoa(
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 166 155.3" width="20" height="20" opacity="0.1"><path d="M163 35S110-4 69 5l-3 1c-6 2-11 5-14 9l-2 3-15 26 26 5c11 7 25 10 38 7l46 9 18-30z" fill="#76b3e1"/><path d="M52 35l-4 1c-17 5-22 21-13 35 10 13 31 20 48 15l62-21S92 26 52 35z" fill="#518ac8"/><path d="M134 80a45 45 0 00-48-15L24 85 4 120l112 19 20-36c4-7 3-15-2-23z" fill="#76b3e1"/><path d="M114 115a45 45 0 00-48-15L4 120s53 40 94 30l3-1c17-5 23-21 13-34z" fill="#518ac8"/></svg>'
+      )}`,
+    };
+
+    text.textContent = framework === "react" ? "React" : "Solid";
+    content.style.backgroundImage = `url('${logo[framework]}')`;
+  }
+
+  // Initialize on load
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", updateFrameworkIndicator);
+  } else {
+    updateFrameworkIndicator();
+  }
+
+  // Update on navigation (Astro view transitions)
+  window.addEventListener("astro:page-load", updateFrameworkIndicator);
+  window.addEventListener("popstate", updateFrameworkIndicator);
+
+  // Also listen for hash changes
+  window.addEventListener("hashchange", updateFrameworkIndicator);
+</script>

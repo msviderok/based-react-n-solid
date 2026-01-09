@@ -1,6 +1,8 @@
 ---
 import "./index.css";
 import LayoutSkeleton from "@/components/astro/LayoutSkeleton.astro";
+import FrameworkIndicator from "@/components/astro/FrameworkIndicator.astro";
+import { ClientRouter } from "astro:transitions";
 ---
 
 <!doctype html>
@@ -12,12 +14,15 @@ import LayoutSkeleton from "@/components/astro/LayoutSkeleton.astro";
     <meta name="generator" content={Astro.generator} />
     <meta name="color-scheme" content="light dark" />
     <title>Astro Basics</title>
+    <ClientRouter />
   </head>
   <body class="bg-background overflow-hidden">
     <div class="min-h-screen relative z-0 max-w-max w-full mx-auto">
       <slot />
       <LayoutSkeleton />
     </div>
+
+    <FrameworkIndicator transition:name="framework-indicator" />
   </body>
 </html>
 

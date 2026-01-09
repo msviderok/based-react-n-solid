@@ -199,6 +199,7 @@ function Content(props: { activeId: string; setActiveId: (id: string) => void })
 
   return (
     <Sidebar
+      side="right"
       collapsible={isMobile() ? "offExamples" : "none"}
       class={cn("border-x justify-center h-svh", !isMobile() && "sticky top-0")}
     >
@@ -303,8 +304,8 @@ function MobileSidebarToggle() {
 
   return (
     <Show when={isMobile() && !openMobile()}>
-      <div class="fixed top-4 left-0 z-50 md:hidden">
-        <SidebarTrigger class="rounded-none! rounded-r-md! bg-muted/80 backdrop-blur-sm border-r border-y border-border shadow-sm size-9 [&>svg]:size-4" />
+      <div class="fixed top-4 right-0 z-50 md:hidden rotate-180">
+        <SidebarTrigger class="rounded-none! rounded-r-md! bg-muted/80 backdrop-blur-sm border-r border-y border-border shadow-sm size-6 [&>svg]:size-4" />
       </div>
     </Show>
   );
