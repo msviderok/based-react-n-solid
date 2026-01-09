@@ -1,15 +1,7 @@
 /** @jsxImportSource solid-js */
 import { COMPLIST } from "@/lib/store";
 import { capitalize, cn } from "@/lib/utils";
-import {
-  createEffect,
-  createSignal,
-  onCleanup,
-  onMount,
-  Show,
-  type Accessor,
-  type ParentProps,
-} from "solid-js";
+import { createEffect, createSignal, onCleanup, onMount, Show, type ParentProps } from "solid-js";
 import { FrameworkSwitch } from "./FrameworkSwitch";
 import { StyleSwitch } from "./StyleSwitch";
 import { Badge } from "./ui/badge";
@@ -203,7 +195,7 @@ export default function LayoutSidebar(props: ParentProps) {
 }
 
 function Content(props: { activeId: string; setActiveId: (id: string) => void }) {
-  const { isMobile } = useSidebar();
+  const { isMobile, toggleSidebar } = useSidebar();
 
   return (
     <Sidebar
@@ -237,6 +229,7 @@ function Content(props: { activeId: string; setActiveId: (id: string) => void })
                         const elementPosition = element.getBoundingClientRect().top;
                         const offsetPosition = elementPosition + window.pageYOffset - offset;
 
+                        toggleSidebar();
                         window.scrollTo({
                           top: offsetPosition,
                           behavior: "instant",

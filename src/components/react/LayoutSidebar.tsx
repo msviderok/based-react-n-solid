@@ -201,7 +201,7 @@ function Content({
   activeId: string;
   setActiveId: (id: string) => void;
 }) {
-  const { isMobile } = useSidebar();
+  const { isMobile, toggleSidebar } = useSidebar();
 
   return (
     <Sidebar
@@ -235,6 +235,7 @@ function Content({
                         const elementPosition = element.getBoundingClientRect().top;
                         const offsetPosition = elementPosition + window.pageYOffset - offset;
 
+                        toggleSidebar();
                         window.scrollTo({
                           top: offsetPosition,
                           behavior: "instant",
